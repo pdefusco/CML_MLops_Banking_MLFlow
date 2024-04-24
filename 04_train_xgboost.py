@@ -56,8 +56,7 @@ STORAGE = "s3a://eng-ml-weekly"
 CONNECTION_NAME = "eng-ml-int-env-aws-dl"
 
 # SET MLFLOW EXPERIMENT NAME
-DATE = date.today()
-EXPERIMENT_NAME = "xgb-cc-fraud-{0}-{1}".format(USERNAME, DATE)
+EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)
 mlflow.set_experiment(EXPERIMENT_NAME)
 
 # CREATE SPARK SESSION WITH DATA CONNECTIONS
