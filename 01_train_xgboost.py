@@ -52,11 +52,11 @@ import pyspark.pandas as ps
 
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-STORAGE = "s3a://go01-demo/"
-CONNECTION_NAME = "go01-aw-dl"
+STORAGE = "s3a://eng-ml-weekly"
+CONNECTION_NAME = "eng-ml-int-env-aws-dl"
 
 DATE = date.today()
-EXPERIMENT_NAME = "xgb-cc-fraud-{0}-{1}".format(USERNAME, DATE)
+EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)
 
 mlflow.set_experiment(EXPERIMENT_NAME)
 

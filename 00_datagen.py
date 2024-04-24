@@ -158,8 +158,8 @@ def main():
 
     USERNAME = os.environ["PROJECT_OWNER"]
     DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-    STORAGE = "s3a://goes-se-sandbox01"
-    CONNECTION_NAME = "se-aw-mdl"
+    STORAGE = "s3a://eng-ml-weekly"
+    CONNECTION_NAME = "eng-ml-int-env-aws-dl"
 
     # Instantiate BankDataGen class
     dg = BankDataGen(USERNAME, DBNAME, STORAGE, CONNECTION_NAME)

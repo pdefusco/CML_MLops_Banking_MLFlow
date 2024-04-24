@@ -181,12 +181,11 @@ class ModelReDeployment():
 
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-STORAGE = "s3a://eng-ml-weekly/eng-ml-int-env-aws-dl/"
+STORAGE = "s3a://eng-ml-weekly"
 CONNECTION_NAME = "eng-ml-int-env-aws-dl"
 
 # SET MLFLOW EXPERIMENT NAME
-DATE = date.today()
-experimentName = "xgb-cc-fraud-{0}-{1}".format(USERNAME, DATE)
+experimentName = "xgb-cc-fraud-{0}".format(USERNAME)
 
 experimentId = mlflow.get_experiment_by_name(experimentName).experiment_id
 runsDf = mlflow.search_runs(experimentId, run_view_type=1)

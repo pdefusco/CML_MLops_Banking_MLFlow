@@ -52,7 +52,7 @@ import pyspark.pandas as ps
 # SET USER VARIABLES
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-STORAGE = "s3a://eng-ml-weekly/eng-ml-int-env-aws-dl/"
+STORAGE = "s3a://eng-ml-weekly"
 CONNECTION_NAME = "eng-ml-int-env-aws-dl"
 
 # SET MLFLOW EXPERIMENT NAME

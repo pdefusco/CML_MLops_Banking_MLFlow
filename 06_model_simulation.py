@@ -49,7 +49,7 @@ from sklearn.metrics import classification_report
 import cmlapi
 from src.api import ApiUtility
 import cml.data_v1 as cmldata
-from utils import IotDataGen
+from utils import BankDataGen
 import datetime
 
 #---------------------------------------------------
@@ -59,7 +59,7 @@ import datetime
 # SET USER VARIABLES
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_{}".format(USERNAME)
-STORAGE = "s3a://eng-ml-weekly/eng-ml-int-env-aws-dl/"
+STORAGE = "s3a://eng-ml-weekly"
 CONNECTION_NAME = "eng-ml-int-env-aws-dl"
 
 # Instantiate BankDataGen class
