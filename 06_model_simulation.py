@@ -59,8 +59,8 @@ import datetime
 # SET USER VARIABLES
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_{}".format(USERNAME)
-STORAGE = "s3a://eng-ml-weekly"
-CONNECTION_NAME = "eng-ml-int-env-aws-dl"
+STORAGE = "s3a://msc1-buk-f3156b92"
+CONNECTION_NAME = "msc1-aw-dl"
 
 # Instantiate BankDataGen class
 dg = BankDataGen(USERNAME, DBNAME, STORAGE, CONNECTION_NAME)
