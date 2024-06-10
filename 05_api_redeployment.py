@@ -181,8 +181,8 @@ class ModelReDeployment():
 
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-STORAGE = "s3a://msc1-buk-f3156b92"
-CONNECTION_NAME = "msc1-aw-dl"
+STORAGE = "s3a://go01-demo"
+CONNECTION_NAME = "go01-aw-dl"
 
 # SET MLFLOW EXPERIMENT NAME
 experimentName = "xgb-cc-fraud-{0}".format(USERNAME)
