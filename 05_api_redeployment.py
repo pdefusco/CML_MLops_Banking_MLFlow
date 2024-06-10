@@ -183,6 +183,7 @@ USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
 STORAGE = "s3a://go01-demo"
 CONNECTION_NAME = "go01-aw-dl"
+projectId = os.environ['CDSW_PROJECT_ID']
 
 # SET MLFLOW EXPERIMENT NAME
 experimentName = "xgb-cc-fraud-{0}".format(USERNAME)
@@ -199,14 +200,20 @@ modelName = "FraudCLF-" + username
 deployment = ModelReDeployment(projectId, username)
 getLatestDeploymentResponse = deployment.get_latest_deployment_details(modelName)
 
-listRuntimesResponse = deployment.listRuntimes()
-listRuntimesResponse
+registeredModelResponse = deployment.registerModelFromExperimentRun(modelName, experimentId, experimentRunId, modelPath)
 
-runtimeId = 'docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-standard:2024.02.1-b4' # Copy a runtime ID from previous output
+modelId = registeredModelResponse.model_id
+modelVersionId = registeredModelResponse.model_versions[0].model_version_id
+
+registeredModelResponse.model_versions[0].model_version_id
+
+modelCreationId = getLatestDeploymentResponse["model_id"]
 
 cpu = 2
 mem = 4
 replicas = 1
+
+runtimeId = "docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-standard:2024.02.1-b4" #Modify as needed
 
 createModelBuildResponse = deployment.createModelBuild(projectId, modelVersionId, modelCreationId, runtimeId, cpu, mem, replicas)
 modelBuildId = createModelBuildResponse.id
