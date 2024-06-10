@@ -179,14 +179,14 @@ class ModelReDeployment():
             "latest_deployment_crn": model_deployment_crn,
         }
 
-USERNAME = os.environ["PROJECT_OWNER"]
+username = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
 STORAGE = "s3a://go01-demo"
 CONNECTION_NAME = "go01-aw-dl"
 projectId = os.environ['CDSW_PROJECT_ID']
 
 # SET MLFLOW EXPERIMENT NAME
-experimentName = "xgb-cc-fraud-{0}".format(USERNAME)
+experimentName = "xgb-cc-fraud-{0}".format(username)
 
 experimentId = mlflow.get_experiment_by_name(experimentName).experiment_id
 runsDf = mlflow.search_runs(experimentId, run_view_type=1)
