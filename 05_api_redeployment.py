@@ -122,6 +122,32 @@ class ModelReDeployment():
         return api_response
 
 
+    def registerModelFromExperimentRun(self, modelName, experimentId, experimentRunId, modelPath):
+        """
+        Method to register a model from an Experiment Run
+        This is an alternative to the mlflow method to register a model via the register_model parameter in the log_model method
+        Input: requires an experiment run
+        Output:
+        """
+
+        CreateRegisteredModelRequest = {
+                                        "project_id": os.environ['CDSW_PROJECT_ID'],
+                                        "experiment_id" : experimentId,
+                                        "run_id": experimentRunId,
+                                        "model_name": modelName,
+                                        "model_path": modelPath
+                                       }
+
+        try:
+            # Register a model.
+            api_response = self.client.create_registered_model(CreateRegisteredModelRequest)
+            pprint(api_response)
+        except ApiException as e:
+            print("Exception when calling CMLServiceApi->create_registered_model: %s\n" % e)
+
+        return api_response
+
+
     def get_latest_deployment_details(self, model_name):
         """
         Given a APIv2 client object and Model Name, use APIv2 to retrieve details about the latest/current deployment.
