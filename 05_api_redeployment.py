@@ -180,7 +180,7 @@ class ModelReDeployment():
         }
 
 username = os.environ["PROJECT_OWNER"]
-DBNAME = "BNK_MLOPS_HOL_"+USERNAME
+DBNAME = "BNK_MLOPS_HOL_"+username
 STORAGE = "s3a://go01-demo"
 CONNECTION_NAME = "go01-aw-dl"
 projectId = os.environ['CDSW_PROJECT_ID']
