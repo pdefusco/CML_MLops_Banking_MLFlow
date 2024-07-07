@@ -52,8 +52,8 @@ import pyspark.pandas as ps
 
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-STORAGE = "s3a://go01-demo"
-CONNECTION_NAME = "go01-aw-dl"
+STORAGE = "s3a://ita-jul-buk-e1ea29ca/data/"
+CONNECTION_NAME = "ita-jul-aw-dl"
 
 DATE = date.today()
 EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)

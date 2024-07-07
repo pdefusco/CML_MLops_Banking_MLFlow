@@ -103,25 +103,6 @@ class ModelReDeployment():
         return api_response
 
 
-    def listRuntimes(self):
-        """
-        Method to list available runtimes
-        """
-        search_filter = {"kernel": "Python 3.9", "edition": "Standard", "editor": "Workbench"}
-        # str | Search filter is an optional HTTP parameter to filter results by.
-        # Supported search filter keys are: [\"image_identifier\", \"editor\", \"kernel\", \"edition\", \"description\", \"full_version\"].
-        # For example:   search_filter = {\"kernel\":\"Python 3.7\",\"editor\":\"JupyterLab\"},. (optional)
-        search = json.dumps(search_filter)
-        try:
-            # List the available runtimes, optionally filtered, sorted, and paginated.
-            api_response = self.client.list_runtimes(search_filter=search, page_size=1000)
-            #pprint(api_response)
-        except ApiException as e:
-            print("Exception when calling CMLServiceApi->list_runtimes: %s\n" % e)
-
-        return api_response
-
-
     def registerModelFromExperimentRun(self, modelName, experimentId, experimentRunId, modelPath):
         """
         Method to register a model from an Experiment Run
@@ -144,6 +125,25 @@ class ModelReDeployment():
             pprint(api_response)
         except ApiException as e:
             print("Exception when calling CMLServiceApi->create_registered_model: %s\n" % e)
+
+        return api_response
+
+
+    def listRuntimes(self):
+        """
+        Method to list available runtimes
+        """
+        search_filter = {"kernel": "Python 3.9", "edition": "Standard", "editor": "Workbench"}
+        # str | Search filter is an optional HTTP parameter to filter results by.
+        # Supported search filter keys are: [\"image_identifier\", \"editor\", \"kernel\", \"edition\", \"description\", \"full_version\"].
+        # For example:   search_filter = {\"kernel\":\"Python 3.7\",\"editor\":\"JupyterLab\"},. (optional)
+        search = json.dumps(search_filter)
+        try:
+            # List the available runtimes, optionally filtered, sorted, and paginated.
+            api_response = self.client.list_runtimes(search_filter=search, page_size=1000)
+            #pprint(api_response)
+        except ApiException as e:
+            print("Exception when calling CMLServiceApi->list_runtimes: %s\n" % e)
 
         return api_response
 
@@ -207,8 +207,8 @@ class ModelReDeployment():
 
 username = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+username
-STORAGE = "s3a://go01-demo"
-CONNECTION_NAME = "go01-aw-dl"
+STORAGE = "s3a://ita-jul-buk-e1ea29ca/data/"
+CONNECTION_NAME = "ita-jul-aw-dl"
 projectId = os.environ['CDSW_PROJECT_ID']
 
 # SET MLFLOW EXPERIMENT NAME
