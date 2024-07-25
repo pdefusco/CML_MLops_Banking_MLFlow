@@ -30,9 +30,9 @@ Runtimes:
   3. Select: Workbench Editor / Python 3.9 Kernel / Standard Edition / 2024.02 Version
 ```
 
-![alt text](../img/holbnk1.png)
+![alt text](../../img/holbnk1.png)
 
-![alt text](../img/holbnk2.png)
+![alt text](../../img/holbnk2.png)
 
 #### 2. Create a CML Session and Install Requirements
 
@@ -55,8 +55,8 @@ In the prompt on the right side enter the following command:
 
 ![alt text](../../img/holbnk3.png)
 
-![alt text](../img/holbnk4.png)
+![alt text](../../img/holbnk4.png)
 
 Once all packages have been installed, proceed to instructions in 00_datagen.
 
-![alt text](../img/holbnk5.png)
+![alt text](../../img/holbnk5.png)
