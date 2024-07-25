@@ -66,3 +66,5 @@ The data platform from Cloudera provides self-service access to integrated, mult
 * Aligned Practices across Environments: implementing common and consistent practices for the management of multiple cloud environments result in lower operational costs and enhanced security practices.
 
 ![alt text](img/cmlplatform.png)
+
+### HOL Step by Step Guides
