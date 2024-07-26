@@ -67,4 +67,9 @@ The data platform from Cloudera provides self-service access to integrated, mult
 
 ![alt text](img/cmlplatform.png)
 
+
 ### HOL Step by Step Guides
+
+Please find detailed HOL instructions in the following folders:
+
+*  [English](https://github.com/pdefusco/CML_MLops_Banking_MLFlow/tree/main/step_by_step_guides/english)
