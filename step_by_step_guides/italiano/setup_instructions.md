@@ -1,6 +1,3 @@
-
-### Italian
-
 ## Configurazione
 
 ### Obiettivo
