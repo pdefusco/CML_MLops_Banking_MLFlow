@@ -1,7 +1,3 @@
-Here's the translation of the provided text into French, Italian, and Portuguese:
-
-### French
-
 ## Configuration
 
 ### Objectif
