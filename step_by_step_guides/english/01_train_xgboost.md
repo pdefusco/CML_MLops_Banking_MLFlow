@@ -42,8 +42,23 @@ Run the script. Then return to the MLFLow Experiments page and validate the new 
 
 * Line 120: the MLFlow Client is used to interact with Experiment Run metadata. You can use the Client to search through runs, compare results, and much more.
 
-#### References and Related Articles
+#### Summary
 
-* To learn more about CML Data Connections:
-* To learn more about Apache Iceberg:
-* To learn more about the PySpark API for Iceberg:
+In this lab used MLFlow to track experiment runs in the Experiments UI, access experiment rund ata programmatically via the MLFlow Client, and register Runs to the MLFlow Registry. When an Exoeriment Run is tracked, MLFlow automatically stores model artifacts and dependencies in the backend.  
+
+The Registry is a separate component from the Workspace and acts as a staging environment for optionally moving models and associated dependencies from one Workspace to another, for example in a DEV to QA to PRD pattern.  
+
+MLFlow in CML does not require any installation or configurations on the part of the CML Admins or Users. It is preinstalled by default in every CML Workspace. CML includes a special Plugin that translates MLFlow API calls to CML API v2 routines. You will learn more about CML API v2 in the next section.
+
+#### Related Articles
+
+* To learn more about MLFlow:
+  * [MLFlow Documentation](https://mlflow.org/docs/latest/index.html)
+  * [Registering a Model in the CML MLFlow UI](https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html)
+  * [CML MLFlow Documentation](https://docs.cloudera.com/machine-learning/cloud/experiments/topics/ml-experiments-v2.html)
+  * [Tuning Hyperparameters with Experiments on CML](https://community.cloudera.com/t5/Community-Articles/Tuning-Hyperparameters-with-Experiments-feature-on-Cloudera/ta-p/368654)
+
+* To learn more about XGBoost:
+  * [XGboost Documentation](https://xgboost.readthedocs.io/en/stable/)
+  * [Distributed XGBoost with PySpark in CML](https://community.cloudera.com/t5/Community-Articles/Distributed-XGBoost-with-PySpark-in-Cloudera-Machine/ta-p/375810)
+  * [CML XGBoost with Dask AMP](https://github.com/cloudera/CML_AMP_Dask_on_CML)

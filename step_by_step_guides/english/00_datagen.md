@@ -8,7 +8,7 @@ This document explains the most important aspects of 00_datagen.py.
 
 Open 00_datagen.py in your CML Session and update the DBNAME, STORAGE, and CONNECTION_NAME variables at lines 160-162 as instructed by your HOL Lead.
 
-Next, press the play button in order to run the whole script. You will be able to observe code output on the right side of your screen.
+Next, press the play button in order to run the whole script. Code output is available on the right side of your screen.
 
 #### Code Highlights
 
@@ -18,8 +18,21 @@ Next, press the play button in order to run the whole script. You will be able t
 
 * Lines 141 and 143: the PySark API for Apache Iceberg is used to create or append data to an Iceberg table format table from a PySpark dataframe.
 
-#### References and Related Articles
+#### Summary
+
+In this lab you used CML Data Connections to preconfigure boiler plate code for data access to CDP and 3rd party data sources including Postgres, SQLServer, and even Snowflake. You can customize Data Connections to standardize and simplify Data Access configurations, as well as restrict access from 3rd party systems.
+
+The PySpark Iceberg API allows you to create Iceberg tables from Spark DataFrames. It is similar and as simple as the standard PySpark API for interacting with Hive tables.
+
+### Related Articles
 
 * To learn more about CML Data Connections:
+  * [Data Connections Article](https://community.cloudera.com/t5/Community-Articles/New-Feature-in-Cloudera-Machine-Learning-Data-Connections/ta-p/336775)
+  * [Custom Data Connections](https://docs.cloudera.com/machine-learning/cloud/mlde/topics/ml-custom-data-conn-create.html)
+  * [Custom Data Connections Article](https://community.cloudera.com/t5/Community-Articles/Using-Custom-Data-Connections-in-Cloudera-Machine-Learning/ta-p/379132)
+  
 * To learn more about Apache Iceberg:
-* To learn more about the PySpark API for Iceberg:
+  * [Apache Iceberg Documentation](https://iceberg.apache.org/docs/1.5.2/)
+  * [Apache Iceberg with Spark](https://iceberg.apache.org/docs/1.5.2/spark-getting-started/)
+  * [Apache Iceberg on Cloudera](https://www.cloudera.com/open-source/apache-iceberg.html)
+  * [Apache Iceberg in CML](https://community.cloudera.com/t5/Community-Articles/Using-Cloudera-Machine-Learning-for-Datalake-and-Iceberg/ta-p/336133)

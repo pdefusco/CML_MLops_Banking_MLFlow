@@ -28,8 +28,18 @@ Next, run 07_model_monitoring.py. Explore the model monitoring diagrams on the r
 
 * Seaborn and Pandas are used throughout the rest of the script in order to create the model performance plots.
 
-#### References and Related Articles
+#### Summary
 
-* To learn more about MLFlow in CML:
-* To learn more about CML Model Deployments:
-* To learn more about the CML API:
+In this lab you used the cdsw SDK to access predictions requests and ground truth backed up in the CML Model Metrics Store in order to monitor model performance (Accuracy).
+
+You can leverage the same tools in unison with scheduled CML Jobs to create continuous monitoring systems and, similarly to the previous labs, programmatically deploy new model versions when performance criteria are not met.  
+
+#### Related Articles
+
+* To learn more about Model Metrics Tracking in CML:
+  * [Model Metrics Documentation](https://docs.cloudera.com/machine-learning/cloud/model-metrics/topics/ml-enabling-model-metrics.html)
+  * [Model Governance](https://docs.cloudera.com/machine-learning/cloud/model-governance/topics/ml-enabling-model-governance.html)
+
+* To learn more about CML Model Deployments & Monitoring:
+  * [Creating and Deploying a Model](https://docs.cloudera.com/machine-learning/cloud/models/topics/ml-creating-and-deploying-a-model.html)
+  * [CML Continuous Model Monitoring AMP](https://github.com/cloudera/CML_AMP_Continuous_Model_Monitoring)

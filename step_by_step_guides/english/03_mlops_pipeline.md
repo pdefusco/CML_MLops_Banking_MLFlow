@@ -62,8 +62,17 @@ Once you created all three jobs, manually trigger the New Batch job. Monitor exe
 
 * 05_api_redeployment.py includes both methods from the mlops util and code to execute the MLOps pipeline. This is also nearly identical to the code in "02_api_deployment.py".
 
-#### References and Related Articles
+#### Summary
 
-* To learn more about MLFlow in CML:
-* To learn more about CML Model Deployments:
-* To learn more about the CML API:
+In this lab you used CML Jobs in tandem with CML APIv2, Apache Iceberg, and MLFlow in order to orchestrate a more advanced MLOps pipeline. With just three scripts and a few lines of code, you've implemented a standardized CI/CD Process that adhers to MLOps Best Practices including data and model reproducibility, auditability, explainability. You did this leveraging built-in components and without any custom installations.
+
+* In the first job, a new data batch is appended to the Iceberg Credit Card Transaction table.
+
+* In the second job, you used Iceberg Time Travel in order to read data within specified time boundaries - in other words to access the latest batch of data only - and then retrain the same XGBoost Classifier with this data.
+
+* Finally, in the last job, you redeployed a new API Endpoint version with the latest model version.
+
+#### Related Articles
+
+* To learn more about CML Jobs:
+  * [Creating a CML Job](https://docs.cloudera.com/machine-learning/cloud/jobs-pipelines/topics/ml-creating-a-job-c.html)
