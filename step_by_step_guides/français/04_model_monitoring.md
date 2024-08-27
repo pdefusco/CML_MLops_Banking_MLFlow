@@ -1,45 +1,47 @@
-## 04 Model Monitoring
+### French
 
-#### Objective
+## 04 Surveillance des Modèles
 
-This document explains the most important aspects of 06_model_simulation.py and 07_model_monitoring.py.
+#### Objectif
 
-#### Instructions for Code Execution
+Ce document explique les aspects les plus importants de 06_model_simulation.py et 07_model_monitoring.py.
 
-Open 06_model_simulation.py and 07_model_monitoring.py in your CML Session. Familiarize yourself with the code and update the DBNAME, STORAGE, and CONNECTION_NAME variables as instructed by your HOL Lead.
+#### Instructions pour l'exécution du code
 
-Execute 06_model_simulation.py and immediately navigate out of the Session to the CML Model Deployment. Open the Monitoring tab and watch the monitoring dashboard get updated in real time as requests are received by the model endpoint.
+Ouvrez 06_model_simulation.py et 07_model_monitoring.py dans votre session CML. Familiarisez-vous avec le code et mettez à jour les variables DBNAME, STORAGE et CONNECTION_NAME comme indiqué par votre responsable HOL.
 
-Next, run 07_model_monitoring.py. Explore the model monitoring diagrams on the right side of the page. How is your model performing?
+Exécutez 06_model_simulation.py, puis quittez immédiatement la session pour accéder au Déploiement du Modèle CML. Ouvrez l'onglet Monitoring et regardez le tableau de bord de surveillance se mettre à jour en temps réel au fur et à mesure que les requêtes sont reçues par le point de terminaison du modèle.
 
-#### Code Highlights
+Ensuite, exécutez 07_model_monitoring.py. Explorez les diagrammes de surveillance du modèle sur le côté droit de la page. Quelle est la performance de votre modèle ?
 
-06_model_simulation.py creates more synthetic data and leverages the CDSW SDK to interact with the deployed endpoints. The data is submitted to the model along with ground truth in order to simulate a wave of requests to the endpoint.
+#### Points Clés du Code
 
-* Line 41: the cdsw sdk is imported. This does not need to be installed.
-* Lines 91-129: a method to submit request batches to the specified Model Deployment endpoint.
-* Lines 134-154: a method to submit ground truth to the specified Model Deployment endpoint.
+06_model_simulation.py génère plus de données synthétiques et utilise le SDK CDSW pour interagir avec les points de terminaison déployés. Les données sont soumises au modèle avec la vérité de base pour simuler une vague de requêtes vers le point de terminaison.
 
-07_model_monitoring.py shows you how you can monitor model performance programmatically. CML features a Postgres Database called "Model Metrics Store" that automatically stores metadata for each request by deployed model. In this script, the cdsw SDK is used again in order to read model metadata and access the Model Metrics Store.
+* Ligne 41 : le SDK cdsw est importé. Il n'est pas nécessaire de l'installer.
+* Lignes 91-129 : une méthode pour soumettre des lots de requêtes au point de terminaison du Déploiement du Modèle spécifié.
+* Lignes 134-154 : une méthode pour soumettre la vérité de base au point de terminaison du Déploiement du Modèle spécifié.
 
-* Lines 66-67: the ApiUtility is instantiated to obtain model metadata. The util's source code is located in the src folder. Similarly to the "mlops" util you leveraged in 02_api_deployment.py, this util allows you to build custom methods in order to obtain model metadata as needed by your use case.
+07_model_monitoring.py vous montre comment vous pouvez surveiller la performance du modèle de manière programmatique. CML dispose d'une base de données Postgres appelée "Model Metrics Store" qui stocke automatiquement les métadonnées pour chaque requête par modèle déployé. Dans ce script, le SDK cdsw est utilisé à nouveau pour lire les métadonnées du modèle et accéder au Model Metrics Store.
 
-* Line 76: cdsw.read_metrics() is used to read the tracked model requests from the Model Metrics Store.
+* Lignes 66-67 : l'ApiUtility est instancié pour obtenir les métadonnées du modèle. Le code source de l'utilitaire est situé dans le dossier src. De la même manière que l'utilitaire "mlops" utilisé dans 02_api_deployment.py, cet utilitaire vous permet de créer des méthodes personnalisées pour obtenir les métadonnées du modèle selon les besoins de votre cas d'utilisation.
 
-* Seaborn and Pandas are used throughout the rest of the script in order to create the model performance plots.
+* Ligne 76 : cdsw.read_metrics() est utilisé pour lire les requêtes de modèle suivies depuis le Model Metrics Store.
 
-#### Summary
+* Seaborn et Pandas sont utilisés tout au long du reste du script pour créer les graphiques de performance du modèle.
 
-In this lab you used the cdsw SDK to access predictions requests and ground truth backed up in the CML Model Metrics Store in order to monitor model performance (Accuracy).
+#### Résumé
 
-You can leverage the same tools in unison with scheduled CML Jobs to create continuous monitoring systems and, similarly to the previous labs, programmatically deploy new model versions when performance criteria are not met.  
+Dans ce laboratoire, vous avez utilisé le SDK cdsw pour accéder aux requêtes de prédiction et à la vérité de base stockées dans le Model Metrics Store de CML afin de surveiller la performance du modèle (précision).
 
-#### Related Articles
+Vous pouvez utiliser les mêmes outils en conjonction avec les Jobs CML planifiés pour créer des systèmes de surveillance continue et, de manière similaire aux laboratoires précédents, déployer de manière programmatique de nouvelles versions du modèle lorsque les critères de performance ne sont pas satisfaits.
 
-* To learn more about Model Metrics Tracking in CML:
-  * [Model Metrics Documentation](https://docs.cloudera.com/machine-learning/cloud/model-metrics/topics/ml-enabling-model-metrics.html)
-  * [Model Governance](https://docs.cloudera.com/machine-learning/cloud/model-governance/topics/ml-enabling-model-governance.html)
+#### Articles Connexes
 
-* To learn more about CML Model Deployments & Monitoring:
-  * [Creating and Deploying a Model](https://docs.cloudera.com/machine-learning/cloud/models/topics/ml-creating-and-deploying-a-model.html)
-  * [CML Continuous Model Monitoring AMP](https://github.com/cloudera/CML_AMP_Continuous_Model_Monitoring)
+* Pour en savoir plus sur le suivi des métriques des modèles dans CML :
+  * [Documentation sur les Métriques des Modèles](https://docs.cloudera.com/machine-learning/cloud/model-metrics/topics/ml-enabling-model-metrics.html)
+  * [Gouvernance des Modèles](https://docs.cloudera.com/machine-learning/cloud/model-governance/topics/ml-enabling-model-governance.html)
+
+* Pour en savoir plus sur les Déploiements et la Surveillance des Modèles CML :
+  * [Création et Déploiement d'un Modèle](https://docs.cloudera.com/machine-learning/cloud/models/topics/ml-creating-and-deploying-a-model.html)
+  * [Surveillance Continue des Modèles CML AMP](https://github.com/cloudera/CML_AMP_Continuous_Model_Monitoring)

@@ -1,53 +1,57 @@
-## Setup
+Here's the translation of the provided text into French, Italian, and Portuguese:
 
-### Objective
+### French
 
-This document provides instructions for setting up the HOL in your CML Workspace.
+## Configuration
 
-### Requirements
+### Objectif
 
-* CML Workspace on version xxx with instance types xxx
-* CML MLFlow Registry
-* CDP User with CML Admin rights and full setup in IDBroker Mappings and Ranger Hadoop SQL / RAZ-related Policies.
-* CML Runtime Resource Profile of 2 vCPU and 4 or 8 GiB
+Ce document fournit des instructions pour configurer le HOL dans votre espace de travail CML.
 
-### Setup Instructions
+### Exigences
 
-1. Deploy CML Project from Git Repository
-2. Create a CML Session and Install Requirements
+* Espace de travail CML en version xxx avec types d'instances xxx
+* Registre MLFlow CML
+* Utilisateur CDP avec droits d'administration CML et configuration complète dans les Mappings IDBroker et les politiques Hadoop SQL / RAZ de Ranger.
+* Profil de ressources d'exécution CML de 2 vCPU et 4 ou 8 GiB
 
-#### 1. Deploy CML Project from Git Repository
+### Instructions de configuration
 
-From inside the CML Workspace create a new project and enter the following parameters in the form:
+1. Déployez le projet CML depuis le dépôt Git
+2. Créez une session CML et installez les prérequis
+
+#### 1. Déployer le projet CML depuis le dépôt Git
+
+Depuis l'espace de travail CML, créez un nouveau projet et entrez les paramètres suivants dans le formulaire :
 
 ```
-Project Name: MLOps HOL <username>
-Project Visibility: Private or Public
-Initial Setup: Git -> https://github.com/pdefusco/CML_MLops_Banking_MLFlow.git
-Runtimes:
-  1. Remove all default runtimes.
-  2. Select Advanced Options
-  3. Select: Workbench Editor / Python 3.9 Kernel / Standard Edition / 2024.02 Version
+Nom du projet : MLOps HOL <username>
+Visibilité du projet : Privé ou Public
+Configuration initiale : Git -> https://github.com/pdefusco/CML_MLops_Banking_MLFlow.git
+Runtimes :
+  1. Supprimez tous les runtimes par défaut.
+  2. Sélectionnez Options Avancées
+  3. Sélectionnez : Éditeur Workbench / Kernel Python 3.9 / Édition Standard / Version 2024.02
 ```
 
 ![alt text](../../img/holbnk1.png)
 
 ![alt text](../../img/holbnk2.png)
 
-#### 2. Create a CML Session and Install Requirements
+#### 2. Créer une session CML et installer les prérequis
 
-Launch a CML Session with:
+Lancez une session CML avec :
 
 ```
-Editor: Workbench
-Kernel: Python 3.9
-Edition: Standard
-Version: 2024.02
-Enable Spark: Version 3.2 or 3.3
-Resource Profile: 2 vCPU / 4 GiB Mem / 0 GPU
+Éditeur : Workbench
+Kernel : Python 3.9
+Édition : Standard
+Version : 2024.02
+Activer Spark : Version 3.2 ou 3.3
+Profil de ressources : 2 vCPU / 4 GiB Mémoire / 0 GPU
 ```
 
-In the prompt on the right side enter the following command:
+Dans l'invite sur le côté droit, entrez la commande suivante :
 
 ```
 !pip3 install -r requirements.txt
@@ -57,6 +61,6 @@ In the prompt on the right side enter the following command:
 
 ![alt text](../../img/holbnk4.png)
 
-Once all packages have been installed, proceed to instructions in 00_datagen.
+Une fois tous les packages installés, passez aux instructions dans 00_datagen.
 
 ![alt text](../../img/holbnk5.png)

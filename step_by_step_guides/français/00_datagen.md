@@ -1,38 +1,38 @@
 ## 00 Datagen
 
-#### Objective
+#### Objectif
 
-This document explains the most important aspects of 00_datagen.py.
+Ce document explique les aspects les plus importants de 00_datagen.py.
 
-#### Instructions for Code Execution
+#### Instructions pour l'exécution du code
 
-Open 00_datagen.py in your CML Session and update the DBNAME, STORAGE, and CONNECTION_NAME variables at lines 160-162 as instructed by your HOL Lead.
+Ouvrez 00_datagen.py dans votre session CML et mettez à jour les variables DBNAME, STORAGE et CONNECTION_NAME aux lignes 160-162 comme indiqué par votre responsable HOL.
 
-Next, press the play button in order to run the whole script. Code output is available on the right side of your screen.
+Ensuite, appuyez sur le bouton de lecture pour exécuter l'ensemble du script. La sortie du code est disponible sur le côté droit de votre écran.
 
-#### Code Highlights
+#### Points forts du code
 
-* Line 50: the cml.data_v1 library is imported. This library allows you to take advantage of CML Data Connections in order to launch a Spark Session and connect to the Data Lake. The DataConnection is used at lines 103 - 109 within the "createSparkConnection" module.
+* Ligne 50 : la bibliothèque cml.data_v1 est importée. Cette bibliothèque vous permet de tirer parti des connexions de données CML pour lancer une session Spark et vous connecter au Data Lake. La DataConnection est utilisée aux lignes 103 - 109 dans le module "createSparkConnection".
 
-* Lines 64 - 95: the "dataGen" module is used to create synthetic data for the classification use case. Observe the data attributes that are being created, and their respective types and value ranges.
+* Lignes 64 - 95 : le module "dataGen" est utilisé pour créer des données synthétiques pour le cas d'utilisation de classification. Observez les attributs de données qui sont créés, ainsi que leurs types et plages de valeurs respectifs.
 
-* Lines 141 and 143: the PySark API for Apache Iceberg is used to create or append data to an Iceberg table format table from a PySpark dataframe.
+* Lignes 141 et 143 : l'API PySpark pour Apache Iceberg est utilisée pour créer ou ajouter des données à une table au format Iceberg à partir d'un DataFrame PySpark.
 
-#### Summary
+#### Résumé
 
-In this lab you used CML Data Connections to preconfigure boiler plate code for data access to CDP and 3rd party data sources including Postgres, SQLServer, and even Snowflake. You can customize Data Connections to standardize and simplify Data Access configurations, as well as restrict access from 3rd party systems.
+Dans ce laboratoire, vous avez utilisé les connexions de données CML pour préconfigurer le code de base pour l'accès aux données de CDP et de sources de données tierces, y compris Postgres, SQLServer et même Snowflake. Vous pouvez personnaliser les connexions de données pour standardiser et simplifier les configurations d'accès aux données, ainsi que restreindre l'accès aux systèmes tiers.
 
-The PySpark Iceberg API allows you to create Iceberg tables from Spark DataFrames. It is similar and as simple as the standard PySpark API for interacting with Hive tables.
+L'API PySpark Iceberg vous permet de créer des tables Iceberg à partir de DataFrames Spark. Elle est similaire et aussi simple que l'API PySpark standard pour interagir avec les tables Hive.
 
-### Related Articles
+### Articles Connexes
 
-* To learn more about CML Data Connections:
-  * [Data Connections Article](https://community.cloudera.com/t5/Community-Articles/New-Feature-in-Cloudera-Machine-Learning-Data-Connections/ta-p/336775)
-  * [Custom Data Connections](https://docs.cloudera.com/machine-learning/cloud/mlde/topics/ml-custom-data-conn-create.html)
-  * [Custom Data Connections Article](https://community.cloudera.com/t5/Community-Articles/Using-Custom-Data-Connections-in-Cloudera-Machine-Learning/ta-p/379132)
-  
-* To learn more about Apache Iceberg:
-  * [Apache Iceberg Documentation](https://iceberg.apache.org/docs/1.5.2/)
-  * [Apache Iceberg with Spark](https://iceberg.apache.org/docs/1.5.2/spark-getting-started/)
-  * [Apache Iceberg on Cloudera](https://www.cloudera.com/open-source/apache-iceberg.html)
-  * [Apache Iceberg in CML](https://community.cloudera.com/t5/Community-Articles/Using-Cloudera-Machine-Learning-for-Datalake-and-Iceberg/ta-p/336133)
+* Pour en savoir plus sur les connexions de données CML :
+  * [Article sur les Connexions de Données](https://community.cloudera.com/t5/Community-Articles/New-Feature-in-Cloudera-Machine-Learning-Data-Connections/ta-p/336775)
+  * [Connexions de Données Personnalisées](https://docs.cloudera.com/machine-learning/cloud/mlde/topics/ml-custom-data-conn-create.html)
+  * [Article sur les Connexions de Données Personnalisées](https://community.cloudera.com/t5/Community-Articles/Using-Custom-Data-Connections-in-Cloudera-Machine-Learning/ta-p/379132)
+
+* Pour en savoir plus sur Apache Iceberg :
+  * [Documentation d'Apache Iceberg](https://iceberg.apache.org/docs/1.5.2/)
+  * [Apache Iceberg avec Spark](https://iceberg.apache.org/docs/1.5.2/spark-getting-started/)
+  * [Apache Iceberg sur Cloudera](https://www.cloudera.com/open-source/apache-iceberg.html)
+  * [Apache Iceberg dans CML](https://community.cloudera.com/t5/Community-Articles/Using-Cloudera-Machine-Learning-for-Datalake-and-Iceberg/ta-p/336133)

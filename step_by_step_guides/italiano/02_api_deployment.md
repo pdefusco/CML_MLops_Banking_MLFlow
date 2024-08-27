@@ -1,39 +1,39 @@
-## 02 API Deployment
+## 02 Distribuzione API
 
-#### Objective
+#### Obiettivo
 
-This document explains the most important aspects of 02_api_deployment.py.
+Questo documento spiega gli aspetti più importanti di 02_api_deployment.py.
 
-#### Instructions for Code Execution
+#### Istruzioni per l'esecuzione del codice
 
-Open 02_api_deployment.py in your CML Session. Familiarize yourself with the code. Then open mlops.py and also familiarize yourself with the code.
+Apri 02_api_deployment.py nella tua sessione CML e aggiorna le variabili DBNAME, STORAGE e CONNECTION_NAME alle righe 160-162 come indicato dal tuo HOL Lead.
 
-Next, reutrn to 02_api_deployment.py and press the play button in order to run the whole script. You will be able to observe code output on the right side of your screen.
+Successivamente, premi il pulsante di riproduzione per eseguire l'intero script. Potrai osservare l'output del codice sul lato destro dello schermo.
 
-#### Code Highlights
+#### Punti salienti del codice
 
-* Line 46: the "ModelDeployment" class is imported from the "mlops" util. This util has been placed in the "/home/cdsw" folder.  
+* Riga 46: la classe "ModelDeployment" è importata dall'utilitario "mlops". Questo utilitario è stato collocato nella cartella "/home/cdsw".
 
-* Line 49: the CML API client is instantiated. The API provides you with over 100 Python methods to execute actions such as creating projects, launching jobs, and a lot more. In this example, the API is used to "list_projects()".
+* Riga 49: il client API CML è istanziato. L'API ti fornisce oltre 100 metodi Python per eseguire azioni come la creazione di progetti, l'avvio di job e molto altro. In questo esempio, l'API viene utilizzata per "list_projects()".
 
-* Line 62: the API Client is passed as an argument to the ModelDeployment instance. The mlops.py util includes a few methods that extend and override API methods. Typically, CML Machine Learning Engineers create Python Interfaces to build custom MLOps pipelines as required by their use case.
+* Riga 62: il Client API viene passato come argomento all'istanza di ModelDeployment. L'utilitario mlops.py include alcuni metodi che estendono e sovrascrivono i metodi API. In genere, gli ingegneri di machine learning CML creano interfacce Python per costruire pipeline MLOps personalizzate in base ai loro casi d'uso.
 
-* Line 68: the latest MLFlow Experiment Run is used to register the Model in the CML MLFlow Registry.
+* Riga 68: l'ultima Esplorazione Esperimento MLFlow viene utilizzata per registrare il Modello nel Registro MLFlow di CML.
 
-* Lines 74, 78, 81: the registered Model is used to create a new CML Model Deployment. The Model is first created, then built, and finally deployed.
+* Righe 74, 78, 81: il Modello registrato viene utilizzato per creare una nuova Distribuzione Modello CML. Il Modello viene prima creato, poi costruito e infine distribuito.
 
-#### Summary
+#### Sommario
 
-In this lab you used CML APIv2 allows you to programmatically execute actions within CML Workspaces. You can use the API with plain curl CLI statements, or the Python Wrapper which is a lib that is preinstalled in every Cloudera CML Runtime. The API can be used both from 3rd party systems that are external to the CML Workspace, and within the CML Workspace.
+In questo laboratorio hai utilizzato CML APIv2 per eseguire azioni in modo programmatico all'interno degli spazi di lavoro CML. Puoi utilizzare l'API con semplici comandi curl CLI o con il Wrapper Python, che è una libreria preinstallata in ogni Runtime Cloudera CML. L'API può essere utilizzata sia da sistemi di terze parti esterni allo spazio di lavoro CML, sia all'interno dello spazio di lavoro CML.
 
-CML Data Scientists leverage the API to build MLOPs Pipelines. In this lab you used a simple Python Interface to override API methods in order to build a standardized MLOps pipeline to register an Experiment Run in the MLFlow Registry, and then deploy an API Endpoint for model serving.
+Gli scienziati dei dati di CML sfruttano l'API per costruire pipeline MLOps. In questo laboratorio, hai utilizzato una semplice interfaccia Python per sovrascrivere i metodi API e costruire una pipeline MLOps standardizzata per registrare un'Esplorazione Esperimento nel Registro MLFlow e poi distribuire un Endpoint API per il servizio del modello.
 
-#### Related Articles
+#### Articoli Correlati
 
-* To learn more about CML Model Deployments:
-  * [CML Model Deployment with MLFlow and APIv2 Article](https://community.cloudera.com/t5/Community-Articles/CML-Model-Deployment-with-MLFlow-and-APIv2/ta-p/385656)
-  
-* To learn more about the CML API:
+* Per saperne di più sui Distribuzioni di Modelli CML:
+  * [Distribuzione Modello CML con MLFlow e APIv2 Articolo](https://community.cloudera.com/t5/Community-Articles/CML-Model-Deployment-with-MLFlow-and-APIv2/ta-p/385656)
+
+* Per saperne di più sull'API CML:
   * [CML APIv2](https://docs.cloudera.com/machine-learning/cloud/api/topics/ml-api-v2.html)
-  * [CML REST API Reference](https://docs.cloudera.com/machine-learning/cloud/rest-api-reference/index.html)
+  * [Riferimento API REST CML](https://docs.cloudera.com/machine-learning/cloud/rest-api-reference/index.html)
   * [CML API v2 AMP](https://github.com/cloudera/CML_AMP_APIv2)

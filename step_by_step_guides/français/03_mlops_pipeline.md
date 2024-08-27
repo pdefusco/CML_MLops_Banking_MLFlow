@@ -1,78 +1,78 @@
-## 03 MLOps Pipeline
+## 03 Pipeline MLOps
 
-#### Objective
+#### Objectif
 
-This document explains the most important aspects of 03_newbatch.py, 04_train_xgboost.py, and 05_api_redeployment.py.
+Ce document explique les aspects les plus importants de 03_newbatch.py, 04_train_xgboost.py et 05_api_redeployment.py.
 
-#### Instructions for Code Execution
+#### Instructions pour l'exécution du code
 
-Open 03_newbatch.py, 04_train_xgboost.py and 05_api_redeployment.py in your CML Session. Familiarize yourself with the code and update the DBNAME, STORAGE, and CONNECTION_NAME variables as instructed by your HOL Lead.
+Ouvrez 03_newbatch.py, 04_train_xgboost.py et 05_api_redeployment.py dans votre session CML. Familiarisez-vous avec le code et mettez à jour les variables DBNAME, STORAGE et CONNECTION_NAME comme indiqué par votre responsable HOL.
 
-Do not run the scripts individually. Create a CML Job for each instead. Do not run the jobs yet.
+Ne lancez pas les scripts individuellement. Créez plutôt un travail CML pour chacun d'eux. Ne lancez pas encore les travaux.
 
-Create Job "New Batch" with the following configurations:
-
-```
-Name: New Batch Paul
-Script: 03_newbatch.py
-Editor: Workbench
-Kernel: Python 3.9
-Spark Add On: Spark 3.2 or 3.3
-Edition: Standard
-Version: 2024.02
-Schedule: Manual
-Resource Profile: 2 vCPU / 4 Gib / 0 GPU
-```
-
-Create Job "New Batch" with the following configurations:
+Créez le travail "New Batch" avec les configurations suivantes :
 
 ```
-Name: Retrain XGBoost Paul
-Script: 04_train_xgboost.py
-Editor: Workbench
-Kernel: Python 3.9
-Spark Add On: Spark 3.2 or 3.3
-Edition: Standard
-Version: 2024.02
-Schedule: Dependent on New Batch Paul
-Resource Profile: 2 vCPU / 4 Gib / 0 GPU
+Nom : New Batch Paul
+Script : 03_newbatch.py
+Éditeur : Workbench
+Kernel : Python 3.9
+Spark Add On : Spark 3.2 ou 3.3
+Édition : Standard
+Version : 2024.02
+Planification : Manuelle
+Profil de Ressource : 2 vCPU / 4 GiB / 0 GPU
 ```
 
-Create Job "New Batch" with the following configurations:
+Créez le travail "Retrain XGBoost" avec les configurations suivantes :
 
 ```
-Name: API Redeployment Paul
-Script: 05_api_redeployment.py
-Editor: Workbench
-Kernel: Python 3.9
-Spark Add On: Spark 3.2 or 3.3
-Edition: Standard
-Version: 2024.02
-Schedule: Dependent on Retrain XGBoost Paul
-Resource Profile: 2 vCPU / 4 Gib / 0 GPU
+Nom : Retrain XGBoost Paul
+Script : 04_train_xgboost.py
+Éditeur : Workbench
+Kernel : Python 3.9
+Spark Add On : Spark 3.2 ou 3.3
+Édition : Standard
+Version : 2024.02
+Planification : Dépendant de New Batch Paul
+Profil de Ressource : 2 vCPU / 4 GiB / 0 GPU
 ```
 
-Once you created all three jobs, manually trigger the New Batch job. Monitor execution in the Job History tab, and observe that once it is complete the next job in the MLOps pipeline, Retrain XGBoost, is triggered, and finally the last job, API Redeployment, is executed.
+Créez le travail "API Redeployment" avec les configurations suivantes :
 
-#### Code Highlights
+```
+Nom : API Redeployment Paul
+Script : 05_api_redeployment.py
+Éditeur : Workbench
+Kernel : Python 3.9
+Spark Add On : Spark 3.2 ou 3.3
+Édition : Standard
+Version : 2024.02
+Planification : Dépendant de Retrain XGBoost Paul
+Profil de Ressource : 2 vCPU / 4 GiB / 0 GPU
+```
 
-* 03_newbatch.py is mostly identical to 00_datagen.py.
+Une fois que vous avez créé les trois travaux, déclenchez manuellement le travail New Batch. Surveillez l'exécution dans l'onglet Historique des travaux et observez que, une fois terminé, le travail suivant dans le pipeline MLOps, Retrain XGBoost, est déclenché, et enfin le dernier travail, API Redeployment, est exécuté.
 
-* 04_train_xgboost.py is nearly identical to "01_train_xgboost.py". However, at lines 67-69 Iceberg Snapshot metadata is stored as variables. This metadata is used at lines 71-75 in order to perform an Incremental Read i.e. only loading data from the Iceberg table within a start and end time boundary. The metadata is then saved as MLFlow Tags during Experiment Run execution.
+#### Points forts du code
 
-* 05_api_redeployment.py includes both methods from the mlops util and code to execute the MLOps pipeline. This is also nearly identical to the code in "02_api_deployment.py".
+* 03_newbatch.py est presque identique à 00_datagen.py.
 
-#### Summary
+* 04_train_xgboost.py est presque identique à "01_train_xgboost.py". Cependant, aux lignes 67-69, les métadonnées de l'instantané Iceberg sont stockées sous forme de variables. Ces métadonnées sont utilisées aux lignes 71-75 pour effectuer une lecture incrémentale, c'est-à-dire en ne chargeant que les données de la table Iceberg dans une plage horaire donnée. Les métadonnées sont ensuite enregistrées en tant que balises MLFlow pendant l'exécution de l'expérience.
 
-In this lab you used CML Jobs in tandem with CML APIv2, Apache Iceberg, and MLFlow in order to orchestrate a more advanced MLOps pipeline. With just three scripts and a few lines of code, you've implemented a standardized CI/CD Process that adhers to MLOps Best Practices including data and model reproducibility, auditability, explainability. You did this leveraging built-in components and without any custom installations.
+* 05_api_redeployment.py comprend à la fois des méthodes de l'utilitaire mlops et du code pour exécuter le pipeline MLOps. Cela est également presque identique au code de "02_api_deployment.py".
 
-* In the first job, a new data batch is appended to the Iceberg Credit Card Transaction table.
+#### Résumé
 
-* In the second job, you used Iceberg Time Travel in order to read data within specified time boundaries - in other words to access the latest batch of data only - and then retrain the same XGBoost Classifier with this data.
+Dans ce laboratoire, vous avez utilisé les travaux CML en tandem avec l'API CMLv2, Apache Iceberg et MLFlow afin d'orchestrer un pipeline MLOps plus avancé. Avec seulement trois scripts et quelques lignes de code, vous avez mis en œuvre un processus CI/CD standardisé qui adhère aux meilleures pratiques MLOps, y compris la reproductibilité des données et des modèles, l'auditabilité et l'explicabilité. Vous avez réalisé cela en utilisant des composants intégrés et sans installations personnalisées.
 
-* Finally, in the last job, you redeployed a new API Endpoint version with the latest model version.
+* Dans le premier travail, un nouveau lot de données est ajouté à la table Iceberg Credit Card Transaction.
 
-#### Related Articles
+* Dans le deuxième travail, vous avez utilisé Iceberg Time Travel pour lire les données dans des plages horaires spécifiques - en d'autres termes, pour accéder uniquement au dernier lot de données - puis réentraîner le même classificateur XGBoost avec ces données.
 
-* To learn more about CML Jobs:
-  * [Creating a CML Job](https://docs.cloudera.com/machine-learning/cloud/jobs-pipelines/topics/ml-creating-a-job-c.html)
+* Enfin, dans le dernier travail, vous avez redéployé une nouvelle version de l'API Endpoint avec la dernière version du modèle.
+
+#### Articles Connexes
+
+* Pour en savoir plus sur les travaux CML :
+  * [Créer un travail CML](https://docs.cloudera.com/machine-learning/cloud/jobs-pipelines/topics/ml-creating-a-job-c.html)

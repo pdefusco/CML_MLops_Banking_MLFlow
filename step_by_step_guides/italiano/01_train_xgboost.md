@@ -1,64 +1,64 @@
-## 01 Train XGBoost
+## 01 Addestramento XGBoost
 
-#### Objective
+#### Obiettivo
 
-This document explains the most important aspects of 01_train_xgboost.py.
+Questo documento spiega gli aspetti più importanti di 01_train_xgboost.py.
 
-#### Instructions for Code Execution
+#### Istruzioni per l'esecuzione del codice
 
-Open 01_train_xgboost.py in your CML Session and update the DBNAME, STORAGE, and CONNECTION_NAME variables at lines 60-62 as instructed by your HOL Lead.
+Apri 01_train_xgboost.py nella tua sessione CML e aggiorna le variabili DBNAME, STORAGE e CONNECTION_NAME alle righe 60-62 come indicato dal tuo responsabile HOL.
 
-Next, press the play button in order to run the whole script. You will be able to observe code output on the right side of your screen.
+Successivamente, premi il pulsante di riproduzione per eseguire l'intero script. Sarai in grado di osservare l'output del codice sul lato destro dello schermo.
 
-Navigate to the MLFLow Experiments tab and validate experiment creation. Open the Experiment Run and familiarize yourself with Experiment Run metadata. At the bottom of the page, open the Artifacts folder and notice that model dependencies have been tracked.
+Vai alla scheda Esperimenti MLFLow e convalida la creazione dell'esperimento. Apri l'Esecuzione dell'Esperimento e familiarizzati con i metadati dell'esecuzione dell'esperimento. In fondo alla pagina, apri la cartella Artifacts e nota che le dipendenze del modello sono state tracciate.
 
-Next, return to the CML Session and modify the code:
+Poi, torna alla sessione CML e modifica il codice:
 
-* At line 74, replace the following line of code:
+* Alla riga 74, sostituisci la seguente riga di codice:
 
 ```
 model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
 ```
 
-with:
+con:
 
 ```
 model = XGBClassifier(use_label_encoder=False, max_depth=4, eval_metric="logloss")
 ```
 
- * At line 95, add:
+* Alla riga 95, aggiungi:
 
- ```
+```
 mlflow.log_param("max_depth", 4)
- ```
+```
 
-Run the script. Then return to the MLFLow Experiments page and validate the new Experiment Run. Compare Experiment Run metadata with the previous run and notice it has changed.
+Esegui lo script. Poi torna alla pagina degli Esperimenti MLFLow e convalida la nuova Esecuzione dell'Esperimento. Confronta i metadati dell'esecuzione dell'esperimento con quelli dell'esecuzione precedente e nota le modifiche.
 
-#### Code Highlights
+#### Punti salienti del codice
 
-* Line 41: the MLFlow package is imported. MLFlow is installed in CML Projects by default. An internal Plugin tranaslates MLFlow methods to CML API methods. There is no need to install or configure MLFlow in order to use its Tracking capabilities.
+* Riga 41: il pacchetto MLFlow è importato. MLFlow è installato di default nei progetti CML. Un plugin interno traduce i metodi MLFlow in metodi dell'API CML. Non è necessario installare o configurare MLFlow per utilizzare le sue capacità di tracciamento.
 
-* Lines 72 - 100: XGBoost training code is defined within the context of an MLFlow Experiment Run. XGBoost code is otherwise unchanged. The "mlflow.log_param()" method is used to log model metrics. The "mlflow.log_model()" method is used to track model artifacts in the "artifacts" folder.
+* Righe 72 - 100: il codice di addestramento XGBoost è definito nel contesto di un'Esecuzione di Esperimento MLFlow. Il codice XGBoost rimane invariato. Il metodo "mlflow.log_param()" è utilizzato per registrare le metriche del modello. Il metodo "mlflow.log_model()" è utilizzato per tracciare gli artefatti del modello nella cartella "artifacts".
 
-* Line 120: the MLFlow Client is used to interact with Experiment Run metadata. You can use the Client to search through runs, compare results, and much more.
+* Riga 120: il Client MLFlow è utilizzato per interagire con i metadati dell'esecuzione dell'esperimento. Puoi utilizzare il Client per cercare tra le esecuzioni, confrontare i risultati e molto altro.
 
-#### Summary
+#### Riassunto
 
-In this lab used MLFlow to track experiment runs in the Experiments UI, access experiment rund ata programmatically via the MLFlow Client, and register Runs to the MLFlow Registry. When an Exoeriment Run is tracked, MLFlow automatically stores model artifacts and dependencies in the backend.  
+In questo laboratorio, hai utilizzato MLFlow per tracciare le esecuzioni degli esperimenti nell'interfaccia degli esperimenti, accedere ai dati delle esecuzioni degli esperimenti in modo programmatico tramite il client MLFlow e registrare le esecuzioni nel Registro MLFlow. Quando un'Esecuzione dell'Esperimento viene tracciata, MLFlow memorizza automaticamente gli artefatti e le dipendenze del modello nel backend.
 
-The Registry is a separate component from the Workspace and acts as a staging environment for optionally moving models and associated dependencies from one Workspace to another, for example in a DEV to QA to PRD pattern.  
+Il Registro è un componente separato dallo spazio di lavoro e funge da ambiente di staging per spostare eventualmente modelli e dipendenze associate da uno spazio di lavoro a un altro, ad esempio in uno schema DEV a QA a PRD.
 
-MLFlow in CML does not require any installation or configurations on the part of the CML Admins or Users. It is preinstalled by default in every CML Workspace. CML includes a special Plugin that translates MLFlow API calls to CML API v2 routines. You will learn more about CML API v2 in the next section.
+MLFlow in CML non richiede alcuna installazione o configurazione da parte degli amministratori o degli utenti CML. È preinstallato di default in ogni spazio di lavoro CML. CML include un plugin speciale che traduce le chiamate API MLFlow in routine dell'API CML v2. Imparerai di più sull'API CML v2 nella sezione successiva.
 
-#### Related Articles
+#### Articoli Correlati
 
-* To learn more about MLFlow:
-  * [MLFlow Documentation](https://mlflow.org/docs/latest/index.html)
-  * [Registering a Model in the CML MLFlow UI](https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html)
-  * [CML MLFlow Documentation](https://docs.cloudera.com/machine-learning/cloud/experiments/topics/ml-experiments-v2.html)
-  * [Tuning Hyperparameters with Experiments on CML](https://community.cloudera.com/t5/Community-Articles/Tuning-Hyperparameters-with-Experiments-feature-on-Cloudera/ta-p/368654)
+* Per saperne di più su MLFlow:
+  * [Documentazione MLFlow](https://mlflow.org/docs/latest/index.html)
+  * [Registrazione di un modello nell'interfaccia utente MLFlow CML](https://docs.cloudera.com/machine-learning/1.5.4/models/topics/ml-registering-model-using-ui.html)
+  * [Documentazione MLFlow CML](https://docs.cloudera.com/machine-learning/cloud/experiments/topics/ml-experiments-v2.html)
+  * [Ottimizzazione degli iperparametri con le esperienze su CML](https://community.cloudera.com/t5/Community-Articles/Tuning-Hyperparameters-with-Experiments-feature-on-Cloudera/ta-p/368654)
 
-* To learn more about XGBoost:
-  * [XGboost Documentation](https://xgboost.readthedocs.io/en/stable/)
-  * [Distributed XGBoost with PySpark in CML](https://community.cloudera.com/t5/Community-Articles/Distributed-XGBoost-with-PySpark-in-Cloudera-Machine/ta-p/375810)
-  * [CML XGBoost with Dask AMP](https://github.com/cloudera/CML_AMP_Dask_on_CML)
+* Per saperne di più su XGBoost:
+  * [Documentazione XGboost](https://xgboost.readthedocs.io/en/stable/)
+  * [XGBoost distribuito con PySpark in CML](https://community.cloudera.com/t5/Community-Articles/Distributed-XGBoost-with-PySpark-in-Cloudera-Machine/ta-p/375810)
+  * [XGBoost CML con Dask AMP](https://github.com/cloudera/CML_AMP_Dask_on_CML)
