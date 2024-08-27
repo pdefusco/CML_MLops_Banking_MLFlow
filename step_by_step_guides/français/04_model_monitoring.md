@@ -1,5 +1,3 @@
-### French
-
 ## 04 Surveillance des Modèles
 
 #### Objectif
