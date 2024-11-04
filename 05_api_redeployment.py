@@ -207,7 +207,6 @@ class ModelReDeployment():
 
 username = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+username
-STORAGE = "s3a://ita-jul-buk-e1ea29ca/data/"
 CONNECTION_NAME = "ita-jul-aw-dl"
 projectId = os.environ['CDSW_PROJECT_ID']
 

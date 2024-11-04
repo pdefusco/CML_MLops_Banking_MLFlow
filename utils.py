@@ -54,9 +54,8 @@ class BankDataGen:
 
     '''Class to Generate Banking Data'''
 
-    def __init__(self, username, dbname, storage, connectionName):
+    def __init__(self, username, dbname, connectionName):
         self.username = username
-        self.storage = storage
         self.dbname = dbname
         self.connectionName = connectionName
 
@@ -115,8 +114,8 @@ class BankDataGen:
         """
         Method to save credit card transactions df as csv in cloud storage
         """
-
-        df.write.format("csv").mode('overwrite').save(self.storage + "/bank_fraud_demo/" + self.username)
+        #df.write.format("csv").mode('overwrite').save(self.storage + "/bank_fraud_demo/" + self.username)
+        pass
 
 
     def createDatabase(self, spark):
