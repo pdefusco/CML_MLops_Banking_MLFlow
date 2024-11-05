@@ -62,7 +62,7 @@ DBNAME = "BNK_MLOPS_HOL_{}".format(USERNAME)
 CONNECTION_NAME = "ita-jul-aw-dl"
 
 # Instantiate BankDataGen class
-dg = BankDataGen(USERNAME, DBNAME, STORAGE, CONNECTION_NAME)
+dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
 
 # Create CML Spark Connection
 spark = dg.createSparkConnection()
