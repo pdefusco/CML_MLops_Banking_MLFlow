@@ -160,7 +160,7 @@ def main():
     CONNECTION_NAME = "paul-november-aw-dl"
 
     # Instantiate BankDataGen class
-    dg = BankDataGen(USERNAME, DBNAME, STORAGE, CONNECTION_NAME)
+    dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
 
     # Create CML Spark Connection
     spark = dg.createSparkConnection()
