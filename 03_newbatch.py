@@ -156,10 +156,10 @@ def main():
 
     USERNAME = os.environ["PROJECT_OWNER"]
     DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-    CONNECTION_NAME = "ita-jul-aw-dl"
+    CONNECTION_NAME = "paul-november-aw-dl"
 
     # Instantiate BankDataGen class
-    dg = BankDataGen(USERNAME, DBNAME, STORAGE, CONNECTION_NAME)
+    dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
 
     # Create CML Spark Connection
     spark = dg.createSparkConnection()
