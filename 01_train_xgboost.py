@@ -52,7 +52,7 @@ import pyspark.pandas as ps
 
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-CONNECTION_NAME = "ita-jul-aw-dl"
+CONNECTION_NAME = "paul-november-aw-dl"
 
 DATE = date.today()
 EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)
