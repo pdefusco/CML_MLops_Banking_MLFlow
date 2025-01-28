@@ -6,7 +6,7 @@ This document explains the most important aspects of 00_datagen.py.
 
 #### Instructions for Code Execution
 
-Open 00_datagen.py in your CML Session and update the DBNAME, STORAGE, and CONNECTION_NAME variables at lines 160-162 as instructed by your HOL Lead.
+Open 00_datagen.py in your CML Session and update the CONNECTION_NAME variable at lines 162 as instructed by your HOL Lead.
 
 Next, press the play button in order to run the whole script. Code output is available on the right side of your screen.
 
@@ -30,7 +30,7 @@ The PySpark Iceberg API allows you to create Iceberg tables from Spark DataFrame
   * [Data Connections Article](https://community.cloudera.com/t5/Community-Articles/New-Feature-in-Cloudera-Machine-Learning-Data-Connections/ta-p/336775)
   * [Custom Data Connections](https://docs.cloudera.com/machine-learning/cloud/mlde/topics/ml-custom-data-conn-create.html)
   * [Custom Data Connections Article](https://community.cloudera.com/t5/Community-Articles/Using-Custom-Data-Connections-in-Cloudera-Machine-Learning/ta-p/379132)
-  
+
 * To learn more about Apache Iceberg:
   * [Apache Iceberg Documentation](https://iceberg.apache.org/docs/1.5.2/)
   * [Apache Iceberg with Spark](https://iceberg.apache.org/docs/1.5.2/spark-getting-started/)

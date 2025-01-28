@@ -6,7 +6,7 @@ Questo documento spiega gli aspetti più importanti di 00_datagen.py.
 
 #### Istruzioni per l'esecuzione del codice
 
-Apri 00_datagen.py nella tua sessione CML e aggiorna le variabili DBNAME, STORAGE e CONNECTION_NAME alle righe 160-162 come indicato dal tuo responsabile HOL.
+Apri 00_datagen.py nella tua sessione CML e aggiorna la variabile CONNECTION_NAME alla riga 162 come indicato dal tuo responsabile HOL.
 
 Successivamente, premi il pulsante di riproduzione per eseguire l'intero script. L'output del codice è disponibile sul lato destro dello schermo.
 
