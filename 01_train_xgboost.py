@@ -49,6 +49,12 @@ from datetime import date
 import cml.data_v1 as cmldata
 import pyspark.pandas as ps
 
+import onnx
+from urllib.parse import urlparse
+from sklearn.preprocessing import FunctionTransformer
+from mlflow.models import infer_signature
+from onnxconverter_common import FloatTensorType
+
 
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "BNK_MLOPS_HOL_"+USERNAME
@@ -95,7 +101,19 @@ with mlflow.start_run():
     # Step 2:
     # Step 3:
 
+    num_features = X.shape[1]
+    initial_type = [("input", FloatTensorType([None, num_features]))]
+
+    model_signature = infer_signature(X_train, y_pred)
+    onnx_model = onnxmltools.convert_xgboost(clf, initial_types=initial_type)
+    #onnxmltools.utils.save_model(onnx_model, "fraud_classifier.onnx")
+    mlflow.onnx.log_model(onnx_model, "fraud-clf-onnx-xgboost",
+                          registered_model_name="fraud-detector-onnx-xgboost",
+                          signature=model_signature)
+    #print("\nFinal model saved as 'fraud_classifier.onnx'.")
+
     mlflow.xgboost.log_model(model, artifact_path="artifacts")#, registered_model_name="my_xgboost_model"
+
 
 def getLatestExperimentInfo(experimentName):
     """
