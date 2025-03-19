@@ -50,6 +50,7 @@ import cml.data_v1 as cmldata
 import pyspark.pandas as ps
 
 import onnx
+import onnxmltools
 from urllib.parse import urlparse
 from sklearn.preprocessing import FunctionTransformer
 from mlflow.models import infer_signature
