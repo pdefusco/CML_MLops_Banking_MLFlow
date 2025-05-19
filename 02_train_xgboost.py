@@ -50,8 +50,8 @@ import cml.data_v1 as cmldata
 import pyspark.pandas as ps
 
 USERNAME = os.environ["PROJECT_OWNER"]
-DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-CONNECTION_NAME = "go01-aw-dl"
+DBNAME = "credit_card_trx_"+USERNAME
+CONNECTION_NAME = "paul-pocs-aw-dl"
 
 DATE = date.today()
 EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)
@@ -61,7 +61,7 @@ mlflow.set_experiment(EXPERIMENT_NAME)
 conn = cmldata.get_connection(CONNECTION_NAME)
 spark = conn.get_spark_session()
 
-df_from_sql = ps.read_table('{0}.CC_TRX_{1}'.format(DBNAME, USERNAME))
+df_from_sql = ps.read_table('{0}.TRX_{1}'.format(DBNAME, USERNAME))
 df = df_from_sql.to_pandas()
 df = df.drop(columns=["job"])
 

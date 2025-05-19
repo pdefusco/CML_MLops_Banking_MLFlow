@@ -117,16 +117,6 @@ class BankDataGen:
         #df.write.format("csv").mode('overwrite').save(self.storage + "/bank_fraud_demo/" + self.username)
         pass
 
-    def createDatabase(self, spark):
-        """
-        Method to create database before data generated is saved to new database and table
-        """
-
-        spark.sql("CREATE DATABASE IF NOT EXISTS {}".format(self.dbname))
-
-        print("SHOW DATABASES LIKE '{}'".format(self.dbname))
-        spark.sql("SHOW DATABASES LIKE '{}'".format(self.dbname)).show()
-
 
     def createOrAppend(self, df):
         """
@@ -136,11 +126,11 @@ class BankDataGen:
         """
 
         try:
-            df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
+            df.writeTo("{0}.TRX_{1}".format(self.dbname, self.username))\
               .using("iceberg").tableProperty("write.format.default", "parquet").append()
 
         except:
-            df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
+            df.writeTo("{0}.TRX_{1}".format(self.dbname, self.username))\
                 .using("iceberg").tableProperty("write.format.default", "parquet").createOrReplace()
 
 
@@ -155,8 +145,9 @@ class BankDataGen:
 def main():
 
     USERNAME = os.environ["PROJECT_OWNER"]
-    DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-    CONNECTION_NAME = "paul-november-aw-dl"
+    DBNAME = "credit_card_trx_"+USERNAME
+    CONNECTION_NAME = "paul-pocs-aw-dl"
+
 
     # Instantiate BankDataGen class
     dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
@@ -167,14 +158,11 @@ def main():
     # Create Banking Transactions DF
     df = dg.dataGen(spark)
 
-    # Create Spark Database
-    dg.createDatabase(spark)
-
     # Create Iceberg Table in Database
     dg.createOrAppend(df)
 
     # Validate Iceberg Table in Database
-    spark.read.format("iceberg").load('{0}.CC_TRX_{1}.snapshots'.format(DBNAME, USERNAME)).show()
+    spark.read.format("iceberg").load('{0}.TRX_{1}.snapshots'.format(DBNAME, USERNAME)).show()
 
 
 

@@ -206,8 +206,8 @@ class ModelReDeployment():
         }
 
 username = os.environ["PROJECT_OWNER"]
-DBNAME = "BNK_MLOPS_HOL_"+username
-CONNECTION_NAME = "paul-november-aw-dl"
+DBNAME = "credit_card_trx_"+USERNAME
+CONNECTION_NAME = "paul-pocs-aw-dl"
 projectId = os.environ['CDSW_PROJECT_ID']
 
 # SET MLFLOW EXPERIMENT NAME

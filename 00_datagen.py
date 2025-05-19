@@ -124,6 +124,10 @@ class BankDataGen:
         Method to create database before data generated is saved to new database and table
         """
 
+        spark.sql("DROP TABLE IF EXISTS {0}.TRX_{1} PURGE".format(self.dbname, self.username))
+
+        spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(self.dbname))
+
         spark.sql("CREATE DATABASE IF NOT EXISTS {}".format(self.dbname))
 
         print("SHOW DATABASES LIKE '{}'".format(self.dbname))
@@ -137,12 +141,12 @@ class BankDataGen:
         The table is meant to be updated periodically as part of a CML Job
         """
 
-        try:
-            df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
-              .using("iceberg").tableProperty("write.format.default", "parquet").append()
+        #try:
+        #    df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
+        #      .using("iceberg").tableProperty("write.format.default", "parquet").append()
 
-        except:
-            df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
+        #except:
+        df.writeTo("{0}.TRX_{1}".format(self.dbname, self.username))\
                 .using("iceberg").tableProperty("write.format.default", "parquet").createOrReplace()
 
 
@@ -157,8 +161,8 @@ class BankDataGen:
 def main():
 
     USERNAME = os.environ["PROJECT_OWNER"]
-    DBNAME = "BNK_MLOPS_HOL_"+USERNAME
-    CONNECTION_NAME = "go01-aw-dl"
+    DBNAME = "credit_card_trx_"+USERNAME
+    CONNECTION_NAME = "paul-pocs-aw-dl"
 
     # Instantiate BankDataGen class
     dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
