@@ -227,6 +227,8 @@ getLatestDeploymentResponse = deployment.get_latest_deployment_details(modelName
 
 registeredModelResponse = deployment.registerModelFromExperimentRun(modelName, experimentId, experimentRunId, modelPath)
 
+time.sleep(20)
+
 modelId = registeredModelResponse.model_id
 modelVersionId = registeredModelResponse.model_versions[0].model_version_id
 
