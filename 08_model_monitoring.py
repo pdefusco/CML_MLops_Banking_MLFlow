@@ -37,8 +37,13 @@
 # #  Author(s): Paul de Fusco
 #***************************************************************************/
 
+try:
+    import cml.utils_v1 as utils
+    cdsw = utils._emulate_cdsw()
+except ImportError:
+    import cdsw
 
-import cdsw, time, os
+import time, os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
