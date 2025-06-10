@@ -152,19 +152,19 @@ def main():
 
 
     # Instantiate BankDataGen class
-    dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
+    bdg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
 
     # Create CML Spark Connection
-    spark = dg.createSparkConnection()
+    spark = bdg.createSparkConnection()
 
     # Create Banking Transactions DF
-    df = dg.dataGen(spark)
+    df = bdg.dataGen(spark)
 
     # Create Iceberg Table in Database
-    dg.createOrAppend(df)
+    bdg.createOrAppend(df)
 
     # Validate Iceberg Table
-    dg.validateTable(spark)
+    bdg.validateTable(spark)
 
 
 if __name__ == '__main__':

@@ -168,22 +168,22 @@ def main():
     CONNECTION_NAME = "rapids-demo-aw-dl"
 
     # Instantiate BankDataGen class
-    dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
+    bdg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
 
     # Create CML Spark Connection
-    spark = dg.createSparkConnection()
+    spark = bdg.createSparkConnection()
 
     # Create Banking Transactions DF
-    df = dg.dataGen(spark)
+    df = bdg.dataGen(spark)
 
     # Create Spark Database
-    dg.createDatabase(spark)
+    bdg.createDatabase(spark)
 
     # Create Iceberg Table in Database
-    dg.createOrReplace(df)
+    bdg.createOrReplace(df)
 
     # Validate Iceberg Table in Database
-    dg.validateTable(spark)
+    bdg.validateTable(spark)
 
 
 if __name__ == '__main__':
