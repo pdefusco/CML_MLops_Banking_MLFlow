@@ -205,7 +205,7 @@ class ModelReDeployment():
             "latest_deployment_crn": model_deployment_crn,
         }
 
-username = os.environ["PROJECT_OWNER"]
+USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = "mlops_"+USERNAME
 CONNECTION_NAME = "rapids-demo-aw-dl"
 projectId = os.environ['CDSW_PROJECT_ID']
