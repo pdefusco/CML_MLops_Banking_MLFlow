@@ -51,8 +51,8 @@ import pyspark.pandas as ps
 
 # SET USER VARIABLES
 USERNAME = os.environ["PROJECT_OWNER"]
-DBNAME = "credit_card_trx_"+USERNAME
-CONNECTION_NAME = "paul-pocs-aw-dl"
+DBNAME = "mlops_"+USERNAME
+CONNECTION_NAME = "rapids-demo-aw-dl"
 
 # SET MLFLOW EXPERIMENT NAME
 EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)
@@ -63,15 +63,15 @@ conn = cmldata.get_connection(CONNECTION_NAME)
 spark = conn.get_spark_session()
 
 # READ LATEST ICEBERG METADATA
-snapshot_id = spark.read.format("iceberg").load('{0}.TRX_{1}.snapshots'.format(DBNAME, USERNAME)).select("snapshot_id").tail(1)[0][0]
-committed_at = spark.read.format("iceberg").load('{0}.TRX_{1}.snapshots'.format(DBNAME, USERNAME)).select("committed_at").tail(1)[0][0].strftime('%m/%d/%Y')
-parent_id = spark.read.format("iceberg").load('{0}.TRX_{1}.snapshots'.format(DBNAME, USERNAME)).select("parent_id").tail(1)[0][0]
+snapshot_id = spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(DBNAME, USERNAME)).select("snapshot_id").tail(1)[0][0]
+committed_at = spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(DBNAME, USERNAME)).select("committed_at").tail(1)[0][0].strftime('%m/%d/%Y')
+parent_id = spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(DBNAME, USERNAME)).select("parent_id").tail(1)[0][0]
 
 incReadDf = spark.read\
     .format("iceberg")\
     .option("start-snapshot-id", parent_id)\
     .option("end-snapshot-id", snapshot_id)\
-    .load("{0}.TRX_{1}".format(DBNAME, USERNAME))
+    .load("{0}.TBL_1_{1}".format(DBNAME, USERNAME))
 
 df = incReadDf.toPandas()
 

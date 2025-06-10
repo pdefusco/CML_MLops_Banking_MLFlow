@@ -124,7 +124,7 @@ class BankDataGen:
         Method to create database before data generated is saved to new database and table
         """
 
-        spark.sql("DROP TABLE IF EXISTS {0}.TRX_{1} PURGE".format(self.dbname, self.username))
+        spark.sql("DROP TABLE IF EXISTS `{0}.transactions_{1}` PURGE".format(self.dbname, self.username))
 
         spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(self.dbname))
 
@@ -146,7 +146,7 @@ class BankDataGen:
         #      .using("iceberg").tableProperty("write.format.default", "parquet").append()
 
         #except:
-        df.writeTo("{0}.TRX_{1}".format(self.dbname, self.username))\
+        df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
                 .using("iceberg").tableProperty("write.format.default", "parquet").createOrReplace()
 
 
@@ -156,13 +156,16 @@ class BankDataGen:
         """
         print("SHOW TABLES FROM '{}'".format(self.dbname))
         spark.sql("SHOW TABLES FROM {}".format(self.dbname)).show()
+        print("SHOW ICEBERG METADATA")
+        spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(self.dbname, self.username)).show(truncate=False)
+
 
 
 def main():
 
     USERNAME = os.environ["PROJECT_OWNER"]
-    DBNAME = "credit_card_trx_"+USERNAME
-    CONNECTION_NAME = "paul-pocs-aw-dl"
+    DBNAME = "mlops_"+USERNAME
+    CONNECTION_NAME = "rapids-demo-aw-dl"
 
     # Instantiate BankDataGen class
     dg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)
