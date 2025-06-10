@@ -71,7 +71,7 @@ incReadDf = spark.read\
     .format("iceberg")\
     .option("start-snapshot-id", parent_id)\
     .option("end-snapshot-id", snapshot_id)\
-    .load("{0}.TBL_1_{1}".format(DBNAME, USERNAME))
+    .load("{0}.transactions_{1}".format(DBNAME, USERNAME))
 
 df = incReadDf.toPandas()
 
