@@ -61,7 +61,7 @@ mlflow.set_experiment(EXPERIMENT_NAME)
 conn = cmldata.get_connection(CONNECTION_NAME)
 spark = conn.get_spark_session()
 
-df_from_sql = ps.read_table('{0}.TBL_1_{1}'.format(DBNAME, USERNAME))
+df_from_sql = ps.read_table('{0}.transactions_{1}'.format(DBNAME, USERNAME))
 df = df_from_sql.to_pandas()
 df = df.drop(columns=["job"])
 
