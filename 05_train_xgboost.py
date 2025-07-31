@@ -50,9 +50,8 @@ import cml.data_v1 as cmldata
 import pyspark.pandas as ps
 
 # SET USER VARIABLES
-USERNAME = os.environ["PROJECT_OWNER"]
-DBNAME = "mlops_"+USERNAME
-CONNECTION_NAME = "rapids-demo-aw-dl"
+DBNAME = os.environ["DBNAME_PREFIX"]+"-"+os.environ["PROJECT_OWNER"]
+CONNECTION_NAME = os.environ["SPARK_CONNECTION_NAME"]
 
 # SET MLFLOW EXPERIMENT NAME
 EXPERIMENT_NAME = "xgb-cc-fraud-{0}".format(USERNAME)

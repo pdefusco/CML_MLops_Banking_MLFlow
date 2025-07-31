@@ -163,9 +163,8 @@ class BankDataGen:
 
 def main():
 
-    USERNAME = os.environ["PROJECT_OWNER"]
-    DBNAME = "mlops_"+USERNAME
-    CONNECTION_NAME = "rapids-demo-aw-dl"
+    DBNAME = os.environ["DBNAME_PREFIX"]+"-"+os.environ["PROJECT_OWNER"]
+    CONNECTION_NAME = os.environ["SPARK_CONNECTION_NAME"]
 
     # Instantiate BankDataGen class
     bdg = BankDataGen(USERNAME, DBNAME, CONNECTION_NAME)

@@ -205,9 +205,8 @@ class ModelReDeployment():
             "latest_deployment_crn": model_deployment_crn,
         }
 
-username = os.environ["PROJECT_OWNER"]
-DBNAME = "mlops_"+username
-CONNECTION_NAME = "rapids-demo-aw-dl"
+DBNAME = os.environ["DBNAME_PREFIX"]+"-"+os.environ["PROJECT_OWNER"]
+CONNECTION_NAME = os.environ["SPARK_CONNECTION_NAME"]
 projectId = os.environ['CDSW_PROJECT_ID']
 
 # SET MLFLOW EXPERIMENT NAME
