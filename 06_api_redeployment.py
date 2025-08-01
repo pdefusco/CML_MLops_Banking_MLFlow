@@ -211,7 +211,7 @@ CONNECTION_NAME = os.environ["SPARK_CONNECTION_NAME"]
 projectId = os.environ['CDSW_PROJECT_ID']
 
 # SET MLFLOW EXPERIMENT NAME
-experimentName = "xgb-cc-fraud-{0}".format(username)
+experimentName = "xgb-cc-fraud-{0}".format(USERNAME)
 
 experimentId = mlflow.get_experiment_by_name(experimentName).experiment_id
 runsDf = mlflow.search_runs(experimentId, run_view_type=1)
@@ -222,7 +222,7 @@ experimentRunId = runsDf.iloc[-1]['run_id']
 modelPath = "artifacts"
 modelName = "FraudCLF-" + username
 
-deployment = ModelReDeployment(projectId, username)
+deployment = ModelReDeployment(projectId, USERNAME)
 getLatestDeploymentResponse = deployment.get_latest_deployment_details(modelName)
 
 registeredModelResponse = deployment.registerModelFromExperimentRun(modelName, experimentId, experimentRunId, modelPath)
