@@ -220,7 +220,7 @@ experimentId = runsDf.iloc[-1]['experiment_id']
 experimentRunId = runsDf.iloc[-1]['run_id']
 
 modelPath = "artifacts"
-modelName = "FraudCLF-" + username
+modelName = "FraudCLF-" + USERNAME
 
 deployment = ModelReDeployment(projectId, USERNAME)
 getLatestDeploymentResponse = deployment.get_latest_deployment_details(modelName)
