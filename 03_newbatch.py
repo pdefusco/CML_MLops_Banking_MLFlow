@@ -1,5 +1,5 @@
 #****************************************************************************
-# (C) Cloudera, Inc. 2020-2023
+# (C) Cloudera, Inc. 2020-2024
 #  All rights reserved.
 #
 #  Applicable Open Source License: GNU Affero General Public License v3.0
@@ -72,13 +72,13 @@ class BankDataGen:
         spark.conf.set("spark.sql.shuffle.partitions", shuffle_partitions_requested)
 
         fakerDataspec = (DataGenerator(spark, rows=data_rows, partitions=partitions_requested)
-                    .withColumn("age", "float", minValue=10, maxValue=100, random=True, distribution="normal")
-                    .withColumn("credit_card_balance", "float", minValue=100, maxValue=30000, random=True, distribution="normal")
-                    .withColumn("bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True, distribution="normal")
-                    .withColumn("mortgage_balance", "float", minValue=0.01, maxValue=1000000, random=True, distribution="normal")
-                    .withColumn("sec_bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True, distribution="normal")
-                    .withColumn("savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True, distribution="normal")
-                    .withColumn("sec_savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True, distribution="normal")
+                    .withColumn("age", "float", minValue=10, maxValue=100, random=True)
+                    .withColumn("credit_card_balance", "float", minValue=100, maxValue=30000, random=True)
+                    .withColumn("bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True)
+                    .withColumn("mortgage_balance", "float", minValue=0.01, maxValue=1000000, random=True)
+                    .withColumn("sec_bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True)
+                    .withColumn("savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True)
+                    .withColumn("sec_savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True)
                     .withColumn("total_est_nworth", "float", minValue=10000, maxValue=500000, random=True)
                     .withColumn("primary_loan_balance", "float", minValue=0.01, maxValue=5000, random=True)
                     .withColumn("secondary_loan_balance", "float", minValue=0.01, maxValue=500000, random=True)
@@ -118,34 +118,19 @@ class BankDataGen:
         pass
 
 
-    def createDatabase(self, spark):
+    def createOrAppend(self, df):
         """
-        Method to create database before data generated is saved to new database and table
-        """
-
-        spark.sql("DROP TABLE IF EXISTS `{0}.transactions_{1}` PURGE".format(self.dbname, self.username))
-
-        spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(self.dbname))
-
-        spark.sql("CREATE DATABASE IF NOT EXISTS {}".format(self.dbname))
-
-        print("SHOW DATABASES LIKE '{}'".format(self.dbname))
-        spark.sql("SHOW DATABASES LIKE '{}'".format(self.dbname)).show()
-
-
-    def createOrReplace(self, df):
-        """
-        Method to create or append data to the BANKING TRANSACTIONS table
+        Method to create or append data to the IOT DEVICES FLEET table
         The table is used to simulate batches of new data
         The table is meant to be updated periodically as part of a CML Job
         """
 
-        #try:
-        #    df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
-        #      .using("iceberg").tableProperty("write.format.default", "parquet").append()
+        try:
+            df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
+              .using("iceberg").tableProperty("write.format.default", "parquet").append()
 
-        #except:
-        df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
+        except:
+            df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
                 .using("iceberg").tableProperty("write.format.default", "parquet").createOrReplace()
 
 
@@ -157,7 +142,6 @@ class BankDataGen:
         spark.sql("SHOW TABLES FROM {}".format(self.dbname)).show()
         print("SHOW ICEBERG METADATA")
         spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(self.dbname, self.username)).show(truncate=False)
-
 
 
 def main():
@@ -175,13 +159,10 @@ def main():
     # Create Banking Transactions DF
     df = bdg.dataGen(spark)
 
-    # Create Spark Database
-    bdg.createDatabase(spark)
-
     # Create Iceberg Table in Database
-    bdg.createOrReplace(df)
+    bdg.createOrAppend(df)
 
-    # Validate Iceberg Table in Database
+    # Validate Iceberg Table
     bdg.validateTable(spark)
 
 
