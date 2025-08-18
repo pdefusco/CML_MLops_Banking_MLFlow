@@ -73,8 +73,7 @@ class BankDataGen:
 
         fakerDataspec = (DataGenerator(spark, rows=data_rows, partitions=partitions_requested)
                     .withColumn("age", "float", minValue=10, maxValue=100, random=True, distribution="normal")
-                    .withColumn("job", "string", values=["management", "technician", "retired", "self-employed", "unemployed", "student", "other", "uknown", "services"], random=True)
-                    .withColumn("credit_card_balance", "float", minValue=100, maxValue=30000, random=True, distribution="normal")
+}                   .withColumn("credit_card_balance", "float", minValue=100, maxValue=30000, random=True, distribution="normal")
                     .withColumn("bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True, distribution="normal")
                     .withColumn("mortgage_balance", "float", minValue=0.01, maxValue=1000000, random=True, distribution="normal")
                     .withColumn("sec_bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True, distribution="normal")

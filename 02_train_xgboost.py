@@ -63,7 +63,7 @@ spark = conn.get_spark_session()
 
 df_from_sql = ps.read_table('{0}.transactions_{1}'.format(DBNAME, USERNAME))
 df = df_from_sql.to_pandas()
-df = df.drop(columns=["job"])
+#df = df.drop(columns=["job"])
 
 test_size = 0.3
 X_train, X_test, y_train, y_test = train_test_split(df.drop("fraud_trx", axis=1), df["fraud_trx"], test_size=test_size)
