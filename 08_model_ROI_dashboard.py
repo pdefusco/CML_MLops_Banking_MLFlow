@@ -48,8 +48,43 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import os
+import cml.data_v1 as cmldata
+import pyspark.pandas as ps
 
-# ----------------------------
+# SET USER VARIABLES
+USERNAME = os.environ["PROJECT_OWNER"]
+DBNAME = os.environ["DBNAME_PREFIX"]+"_"+USERNAME
+CONNECTION_NAME = os.environ["SPARK_CONNECTION_NAME"]
+
+# CREATE SPARK SESSION WITH DATA CONNECTIONS
+conn = cmldata.get_connection(CONNECTION_NAME)
+spark = conn.get_spark_session()
+
+# READ LATEST ICEBERG METADATA
+snapshot_id = spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(DBNAME, USERNAME)).select("snapshot_id").tail(1)[0][0]
+committed_at = spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(DBNAME, USERNAME)).select("committed_at").tail(1)[0][0].strftime('%m/%d/%Y')
+parent_id = spark.read.format("iceberg").load('{0}.transactions_{1}.snapshots'.format(DBNAME, USERNAME)).select("parent_id").tail(1)[0][0]
+
+incReadDf = spark.read\
+    .format("iceberg")\
+    .option("start-snapshot-id", parent_id)\
+    .option("end-snapshot-id", snapshot_id)\
+    .load("{0}.transactions_{1}".format(DBNAME, USERNAME))
+
+df = incReadDf.toPandas()
+
+# TRAIN TEST SPLIT DATA
+X_train, X_test, y_train, y_test = train_test_split(df.drop("fraud_trx", axis=1), df["fraud_trx"], test_size=0.3)
+
+model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
+model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+y_pred = model.predict(X_test)
+y_proba = model.predict_proba(X_test)[:, 1]"""
+
+accuracy = accuracy_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+
+"""# ----------------------------
 # 1. Create synthetic data
 # ----------------------------
 X, y = make_classification(
@@ -67,7 +102,7 @@ model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
 model.fit(X_train, y_train)
 
 # Predict probabilities (we’ll threshold manually)
-y_proba = model.predict_proba(X_test)[:, 1]
+y_proba = model.predict_proba(X_test)[:, 1]"""
 
 # ----------------------------
 # 3. Initialize Dash app
