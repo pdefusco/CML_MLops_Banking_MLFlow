@@ -34,7 +34,14 @@ Runtimes:
 
 ![alt text](../../img/holbnk2.png)
 
-#### 2. Create a CML Session and Install Requirements
+#### 2. Set Project Environment Variables
+
+Set the following environment variables at the Project Level.
+
+SPARK_CONNECTION_NAME -> Found in Spark Data Connections tab.
+DBNAME_PREFIX -> Arbitrary - please use one word without special characters.
+
+#### 3. Create a CML Session and Install Requirements
 
 Launch a CML Session with:
 
