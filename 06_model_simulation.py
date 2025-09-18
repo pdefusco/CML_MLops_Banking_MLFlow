@@ -1,10 +1,8 @@
-# ###########################################################################
-#
-#  CLOUDERA APPLIED MACHINE LEARNING PROTOTYPE (AMP)
-#  (C) Cloudera, Inc. 2024
+#****************************************************************************
+# (C) Cloudera, Inc. 2020-2025
 #  All rights reserved.
 #
-#  Applicable Open Source License: Apache 2.0
+#  Applicable Open Source License: GNU Affero General Public License v3.0
 #
 #  NOTE: Cloudera open source products are modular software products
 #  made up of hundreds of individual components, each of which was
@@ -36,7 +34,8 @@
 #  BUSINESS ADVANTAGE OR UNAVAILABILITY, OR LOSS OR CORRUPTION OF
 #  DATA.
 #
-# ###########################################################################
+# #  Author(s): Paul de Fusco
+#***************************************************************************/
 
 try:
     import cml.utils_v1 as utils
