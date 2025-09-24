@@ -48,6 +48,7 @@ import dbldatagen.distributions as dist
 from dbldatagen import FakerTextFactory, DataGenerator, fakerText
 from faker.providers import bank, credit_card, currency
 import cml.data_v1 as cmldata
+from pyspark.sql import functions as F
 
 
 class BankDataGen:
@@ -86,10 +87,17 @@ class BankDataGen:
                     .withColumn("longitude", "float", minValue=-180, maxValue=180, random=True)
                     .withColumn("latitude", "float", minValue=-90, maxValue=90, random=True)
                     .withColumn("transaction_amount", "float", minValue=0.01, maxValue=30000, random=True)
-                    .withColumn("fraud_trx", "string", values=["0", "1"], weights=[9, 1], random=True)
+                    .withColumn("fraud_trx", "string", values=["0", "1"], weights=[6, 4], random=True)
                     )
         df = fakerDataspec.build()
         df = df.withColumn("fraud_trx", df["fraud_trx"].cast(IntegerType()))
+        df = df.withColumn(
+            "customer_score",
+            F.when(rand() < 0.20, rand())  # 20% of the time, just random noise
+            .otherwise(F.col("fraud_trx") * F.col("age") * F.col("mortgage_balance"))
+        )
+        df = df.withColumn("customer_score", F.col("customer_score").cast(FloatType()))
+
 
         return df
 

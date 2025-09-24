@@ -48,6 +48,9 @@ import dbldatagen.distributions as dist
 from dbldatagen import FakerTextFactory, DataGenerator, fakerText
 from faker.providers import bank, credit_card, currency
 import cml.data_v1 as cmldata
+from pyspark.sql import functions as F
+from pyspark.sql.functions import when, rand
+
 
 
 class BankDataGen:
@@ -72,13 +75,13 @@ class BankDataGen:
         spark.conf.set("spark.sql.shuffle.partitions", shuffle_partitions_requested)
 
         fakerDataspec = (DataGenerator(spark, rows=data_rows, partitions=partitions_requested)
-                    .withColumn("age", "float", minValue=10, maxValue=100, random=True, distribution="normal")
-                    .withColumn("credit_card_balance", "float", minValue=100, maxValue=30000, random=True, distribution="normal")
-                    .withColumn("bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True, distribution="normal")
-                    .withColumn("mortgage_balance", "float", minValue=0.01, maxValue=1000000, random=True, distribution="normal")
-                    .withColumn("sec_bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True, distribution="normal")
-                    .withColumn("savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True, distribution="normal")
-                    .withColumn("sec_savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True, distribution="normal")
+                    .withColumn("age", "float", minValue=10, maxValue=100, random=True)
+                    .withColumn("credit_card_balance", "float", minValue=100, maxValue=30000, random=True)
+                    .withColumn("bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True)
+                    .withColumn("mortgage_balance", "float", minValue=0.01, maxValue=1000000, random=True)
+                    .withColumn("sec_bank_account_balance", "float", minValue=0.01, maxValue=100000, random=True)
+                    .withColumn("savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True)
+                    .withColumn("sec_savings_account_balance", "float", minValue=0.01, maxValue=500000, random=True)
                     .withColumn("total_est_nworth", "float", minValue=10000, maxValue=500000, random=True)
                     .withColumn("primary_loan_balance", "float", minValue=0.01, maxValue=5000, random=True)
                     .withColumn("secondary_loan_balance", "float", minValue=0.01, maxValue=500000, random=True)
@@ -86,10 +89,17 @@ class BankDataGen:
                     .withColumn("longitude", "float", minValue=-180, maxValue=180, random=True)
                     .withColumn("latitude", "float", minValue=-90, maxValue=90, random=True)
                     .withColumn("transaction_amount", "float", minValue=0.01, maxValue=30000, random=True)
-                    .withColumn("fraud_trx", "string", values=["0", "1"], weights=[9, 1], random=True)
+                    .withColumn("fraud_trx", "string", values=["0", "1"], weights=[6, 4], random=True)
                     )
         df = fakerDataspec.build()
         df = df.withColumn("fraud_trx", df["fraud_trx"].cast(IntegerType()))
+        df = df.withColumn(
+            "customer_score",
+            F.when(rand() < 0.20, rand())  # 20% of the time, just random noise
+            .otherwise(F.col("fraud_trx") * F.col("age") * F.col("mortgage_balance"))
+        )
+        df = df.withColumn("customer_score", F.col("customer_score").cast(FloatType()))
+
 
         return df
 
