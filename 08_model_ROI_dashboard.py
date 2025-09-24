@@ -93,7 +93,7 @@ y_proba = model.predict_proba(X_test)[:, 1]
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
-    html.H2("Interactive Threshold Dashboard for XGBoost Classifier"),
+    html.H2("Interactive Model ROI Dashboard"),
 
     # Slider for threshold
     html.Label("Decision Threshold:"),
