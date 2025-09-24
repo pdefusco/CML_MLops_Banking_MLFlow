@@ -145,7 +145,7 @@ def update_outputs(threshold):
     return acc_text, fig
 
 # ----------------------------
-# 5. Run app
+# Run app
 # ----------------------------
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=int(os.environ["CDSW_APP_PORT"]))
