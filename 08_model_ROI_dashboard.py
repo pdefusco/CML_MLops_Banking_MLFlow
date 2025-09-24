@@ -51,6 +51,9 @@ import os
 import cml.data_v1 as cmldata
 import pyspark.pandas as ps
 
+# ----------------------------
+# Get Latest Data
+# ----------------------------
 # SET USER VARIABLES
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = os.environ["DBNAME_PREFIX"]+"_"+USERNAME
@@ -73,39 +76,19 @@ incReadDf = spark.read\
 
 df = incReadDf.toPandas()
 
+# ----------------------------
+# Train Classifier
+# ----------------------------
 # TRAIN TEST SPLIT DATA
 X_train, X_test, y_train, y_test = train_test_split(df.drop("fraud_trx", axis=1), df["fraud_trx"], test_size=0.3)
 
 model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
 model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
 y_pred = model.predict(X_test)
-y_proba = model.predict_proba(X_test)[:, 1]"""
-
-accuracy = accuracy_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-
-"""# ----------------------------
-# 1. Create synthetic data
-# ----------------------------
-X, y = make_classification(
-    n_samples=1000, n_features=10,
-    n_informative=5, n_redundant=2,
-    random_state=42
-)
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+y_proba = model.predict_proba(X_test)[:, 1]
 
 # ----------------------------
-# 2. Fit XGBoost model
-# ----------------------------
-model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
-model.fit(X_train, y_train)
-
-# Predict probabilities (we’ll threshold manually)
-y_proba = model.predict_proba(X_test)[:, 1]"""
-
-# ----------------------------
-# 3. Initialize Dash app
+# Initialize Dash app
 # ----------------------------
 app = dash.Dash(__name__)
 
@@ -127,7 +110,7 @@ app.layout = html.Div([
 ])
 
 # ----------------------------
-# 4. Define callbacks
+# Define callbacks
 # ----------------------------
 @app.callback(
     [Output("accuracy-text", "children"),
@@ -160,7 +143,6 @@ def update_outputs(threshold):
     acc_text = f"Accuracy at threshold {threshold:.2f}: {accuracy:.3f} | TP={tp}, TN={tn}, FP={fp}, FN={fn}"
 
     return acc_text, fig
-
 
 # ----------------------------
 # 5. Run app
