@@ -37,7 +37,6 @@
 # #  Author(s): Paul de Fusco
 #***************************************************************************/
 
-
 import numpy as np
 import pandas as pd
 from sklearn.datasets import make_classification
@@ -72,6 +71,15 @@ incReadDf = spark.read\
     .option("end-snapshot-id", snapshot_id)\
     .load("{0}.transactions_{1}".format(DBNAME, USERNAME))
 
+import os
+import dash
+from dash import dcc, html, Input, Output
+import pandas as pd
+import plotly.express as px
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from xgboost import XGBClassifier
+
 # ----------------------------
 # Data prep and model training
 # ----------------------------
@@ -80,7 +88,8 @@ df = incReadDf.toPandas()
 X_train, X_test, y_train, y_test = train_test_split(
     df.drop("fraud_trx", axis=1),
     df["fraud_trx"],
-    test_size=0.3
+    test_size=0.3,
+    random_state=42
 )
 
 model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
@@ -92,47 +101,75 @@ y_proba = model.predict_proba(X_test)[:, 1]
 # ----------------------------
 app = dash.Dash(__name__)
 
+# ----------------------------
+# Layout
+# ----------------------------
 app.layout = html.Div([
-    html.H2("Interactive Model ROI Dashboard"),
-    html.H4("Net Revenue = TP Revenue + TN Revenue - FP Penalty - FN Opportunity Cost",
-            style={"font-style": "italic", "color": "gray"}),
-
-    # Threshold slider
-    html.Label("Decision Threshold:"),
-    dcc.Slider(
-        id="threshold-slider",
-        min=0.0, max=1.0, step=0.01, value=0.5,
-        marks={0: "0.0", 0.25: "0.25", 0.5: "0.5", 0.75: "0.75", 1: "1.0"},
-        tooltip={"placement": "bottom", "always_visible": True}
-    ),
-
-    # Revenue for class 1
+    html.H2("Interactive Model ROI Dashboard",
+            style={"font-size": "32px", "font-family": "Arial, sans-serif"}),
     html.Div([
-        html.Label("Financial Revenue (Actual Target=1):"),
-        dcc.Input(id="revenue-class-1", type="number", value=100, step=10)
-    ], style={"margin-top": "20px"}),
+        html.P(
+            "Use this tool to explore how adjusting the decision threshold affects model predictions and financial outcomes. "
+            "Modify the threshold and the input variables below to see the impact on True Positives, False Positives, "
+            "False Negatives, and Net Revenue.",
+            style={"font-size": "18px", "font-family": "Arial, sans-serif", "color": "gray"}
+        ),
+        html.P(
+            "Net Revenue = TP Revenue + TN Revenue - Penalty for FP - Opportunity cost for FN. "
+            "TP Revenue = TP * Revenue1, TN Revenue = TN * Revenue0, FP Penalty = FP * PenaltyFP, "
+            "FN Opportunity Cost = FN * Revenue1.",
+            style={"font-size": "18px", "font-family": "Arial, sans-serif", "color": "gray"}
+        )
+    ], style={"margin-bottom": "30px"}),
 
-    # Revenue for class 0
+    # Inputs at the top
     html.Div([
-        html.Label("Financial Revenue (Actual Target=0):"),
-        dcc.Input(id="revenue-class-0", type="number", value=10, step=10)
-    ], style={"margin-top": "10px"}),
+        html.Div([
+            html.Label("Financial Revenue (Actual Target=1):", style={"font-size": "18px"}),
+            dcc.Input(id="revenue-class-1", type="number", value=100, step=10, style={"font-size": "16px"})
+        ], style={"margin-right": "20px"}),
 
-    # Penalty for false positives
+        html.Div([
+            html.Label("Financial Revenue (Actual Target=0):", style={"font-size": "18px"}),
+            dcc.Input(id="revenue-class-0", type="number", value=10, step=10, style={"font-size": "16px"})
+        ], style={"margin-right": "20px"}),
+
+        html.Div([
+            html.Label("Penalty per False Positive:", style={"font-size": "18px"}),
+            dcc.Input(id="penalty-fp", type="number", value=50, step=10, style={"font-size": "16px"})
+        ])
+    ], style={"display": "flex", "margin-bottom": "30px"}),
+
+    # Confusion matrix and threshold slider side by side
     html.Div([
-        html.Label("Penalty per False Positive:"),
-        dcc.Input(id="penalty-fp", type="number", value=50, step=10)
-    ], style={"margin-top": "10px"}),
+        # Confusion matrix
+        html.Div([
+            dcc.Graph(id="confusion-matrix-heatmap")
+        ], style={"width": "70%"}),
 
-    html.Div(id="accuracy-text", style={"margin-top": "20px", "font-size": "18px"}),
+        # Vertical slider
+        html.Div([
+            html.Label("Decision Threshold:", style={"font-size": "18px"}),
+            dcc.Slider(
+                id="threshold-slider",
+                min=0.0, max=1.0, step=0.01, value=0.5,
+                marks={0: "0.0", 0.25: "0.25", 0.5: "0.5", 0.75: "0.75", 1: "1.0"},
+                tooltip={"placement": "left", "always_visible": True},
+                vertical=True,
+                verticalHeight=400
+            )
+        ], style={"width": "10%", "margin-left": "30px", "margin-top": "50px"})
+    ], style={"display": "flex"}),
 
-    html.Div(id="breakdown-text", style={"margin-top": "10px", "font-size": "16px", "color": "darkblue"}),
-
-    dcc.Graph(id="confusion-matrix-heatmap")
+    # Accuracy and revenue breakdown below
+    html.Div([
+        html.Div(id="accuracy-text", style={"margin-top": "20px", "font-size": "20px", "font-family": "Arial, sans-serif"}),
+        html.Div(id="breakdown-text", style={"margin-top": "10px", "font-size": "18px", "font-family": "Arial, sans-serif", "color": "darkblue"})
+    ])
 ])
 
 # ----------------------------
-# Callbacks
+# Callback
 # ----------------------------
 @app.callback(
     [Output("accuracy-text", "children"),
@@ -144,6 +181,11 @@ app.layout = html.Div([
      Input("penalty-fp", "value")]
 )
 def update_outputs(threshold, revenue_1, revenue_0, penalty_fp):
+    # Handle None inputs by providing default values
+    revenue_1 = revenue_1 if revenue_1 is not None else 0
+    revenue_0 = revenue_0 if revenue_0 is not None else 0
+    penalty_fp = penalty_fp if penalty_fp is not None else 0
+
     # Apply threshold
     y_pred = (y_proba >= threshold).astype(int)
 
@@ -151,45 +193,46 @@ def update_outputs(threshold, revenue_1, revenue_0, penalty_fp):
     tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
     accuracy = (tp + tn) / (tp + tn + fp + fn)
 
-    # Revenues
+    # Revenue calculation
     revenue_tp = tp * revenue_1
     revenue_tn = tn * revenue_0
-
-    # Penalty for FP
     total_fp_penalty = fp * penalty_fp
-
-    # Opportunity cost for FN
     total_fn_opp_cost = fn * revenue_1
-
-    # Net Revenue
     net_revenue = revenue_tp + revenue_tn - total_fp_penalty - total_fn_opp_cost
 
-    # Create confusion matrix dataframe
+    # Confusion matrix DataFrame
     cm_df = pd.DataFrame(
         [[tn, fp], [fn, tp]],
         index=["Actual 0", "Actual 1"],
         columns=["Predicted 0", "Predicted 1"]
     )
 
-    # Heatmap
-    fig = px.imshow(
-        cm_df,
-        text_auto=True,
-        color_continuous_scale="Blues",
-        title="Confusion Matrix"
-    )
+    # Heatmap with readable labels
+    fig = px.imshow(cm_df, color_continuous_scale="Blues", title="Confusion Matrix")
+    fig.update_layout(title_x=0.5)  # center the title
 
-    acc_text = (
-        f"Accuracy at threshold {threshold:.2f}: {accuracy:.3f} "
-        f"| TP={tp}, TN={tn}, FP={fp}, FN={fn} "
-        f"| Net Revenue = ${net_revenue:,.2f}"
-    )
+    annotations = []
+    for i, row in enumerate(cm_df.index):
+        for j, col in enumerate(cm_df.columns):
+            if i == 0 and j == 0:
+                label = f"TN={cm_df.iloc[i,j]}"
+            elif i == 0 and j == 1:
+                label = f"FP={cm_df.iloc[i,j]}"
+            elif i == 1 and j == 0:
+                label = f"FN={cm_df.iloc[i,j]}"
+            else:
+                label = f"TP={cm_df.iloc[i,j]}"
+            # White text if background is dark, black otherwise
+            text_color = "white" if cm_df.iloc[i,j] > cm_df.values.max()/2 else "black"
+            annotations.append(
+                dict(x=j, y=i, text=label, showarrow=False, font=dict(size=16, color=text_color))
+            )
+    fig.update_layout(annotations=annotations)
 
+    acc_text = f"Accuracy at threshold {threshold:.2f}: {accuracy:.3f} | Net Revenue = ${net_revenue:,.2f}"
     breakdown_text = (
-        f"TP Revenue = ${revenue_tp:,.2f}  |  "
-        f"TN Revenue = ${revenue_tn:,.2f}  |  "
-        f"FP Penalty = ${total_fp_penalty:,.2f}  |  "
-        f"FN Opportunity Cost = ${total_fn_opp_cost:,.2f}  |  "
+        f"TP Revenue = ${revenue_tp:,.2f} | TN Revenue = ${revenue_tn:,.2f} | "
+        f"FP Penalty = ${total_fp_penalty:,.2f} | FN Opportunity Cost = ${total_fn_opp_cost:,.2f} | "
         f"Net Revenue = ${net_revenue:,.2f}"
     )
 
