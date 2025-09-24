@@ -37,6 +37,7 @@
 # #  Author(s): Paul de Fusco
 #***************************************************************************/
 
+
 import numpy as np
 import pandas as pd
 from sklearn.datasets import make_classification
@@ -51,9 +52,6 @@ import os
 import cml.data_v1 as cmldata
 import pyspark.pandas as ps
 
-# ----------------------------
-# Get Latest Data
-# ----------------------------
 # SET USER VARIABLES
 USERNAME = os.environ["PROJECT_OWNER"]
 DBNAME = os.environ["DBNAME_PREFIX"]+"_"+USERNAME
@@ -74,17 +72,19 @@ incReadDf = spark.read\
     .option("end-snapshot-id", snapshot_id)\
     .load("{0}.transactions_{1}".format(DBNAME, USERNAME))
 
+# ----------------------------
+# Data prep and model training
+# ----------------------------
 df = incReadDf.toPandas()
 
-# ----------------------------
-# Train Classifier
-# ----------------------------
-# TRAIN TEST SPLIT DATA
-X_train, X_test, y_train, y_test = train_test_split(df.drop("fraud_trx", axis=1), df["fraud_trx"], test_size=0.3)
+X_train, X_test, y_train, y_test = train_test_split(
+    df.drop("fraud_trx", axis=1),
+    df["fraud_trx"],
+    test_size=0.3
+)
 
 model = XGBClassifier(use_label_encoder=False, eval_metric="logloss")
 model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
-y_pred = model.predict(X_test)
 y_proba = model.predict_proba(X_test)[:, 1]
 
 # ----------------------------
@@ -94,8 +94,10 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.H2("Interactive Model ROI Dashboard"),
+    html.H4("Net Revenue = TP Revenue + TN Revenue - FP Penalty - FN Opportunity Cost",
+            style={"font-style": "italic", "color": "gray"}),
 
-    # Slider for threshold
+    # Threshold slider
     html.Label("Decision Threshold:"),
     dcc.Slider(
         id="threshold-slider",
@@ -104,20 +106,44 @@ app.layout = html.Div([
         tooltip={"placement": "bottom", "always_visible": True}
     ),
 
+    # Revenue for class 1
+    html.Div([
+        html.Label("Financial Revenue (Actual Target=1):"),
+        dcc.Input(id="revenue-class-1", type="number", value=100, step=10)
+    ], style={"margin-top": "20px"}),
+
+    # Revenue for class 0
+    html.Div([
+        html.Label("Financial Revenue (Actual Target=0):"),
+        dcc.Input(id="revenue-class-0", type="number", value=10, step=10)
+    ], style={"margin-top": "10px"}),
+
+    # Penalty for false positives
+    html.Div([
+        html.Label("Penalty per False Positive:"),
+        dcc.Input(id="penalty-fp", type="number", value=50, step=10)
+    ], style={"margin-top": "10px"}),
+
     html.Div(id="accuracy-text", style={"margin-top": "20px", "font-size": "18px"}),
+
+    html.Div(id="breakdown-text", style={"margin-top": "10px", "font-size": "16px", "color": "darkblue"}),
 
     dcc.Graph(id="confusion-matrix-heatmap")
 ])
 
 # ----------------------------
-# Define callbacks
+# Callbacks
 # ----------------------------
 @app.callback(
     [Output("accuracy-text", "children"),
+     Output("breakdown-text", "children"),
      Output("confusion-matrix-heatmap", "figure")],
-    [Input("threshold-slider", "value")]
+    [Input("threshold-slider", "value"),
+     Input("revenue-class-1", "value"),
+     Input("revenue-class-0", "value"),
+     Input("penalty-fp", "value")]
 )
-def update_outputs(threshold):
+def update_outputs(threshold, revenue_1, revenue_0, penalty_fp):
     # Apply threshold
     y_pred = (y_proba >= threshold).astype(int)
 
@@ -125,14 +151,27 @@ def update_outputs(threshold):
     tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
     accuracy = (tp + tn) / (tp + tn + fp + fn)
 
-    # Create dataframe for heatmap
+    # Revenues
+    revenue_tp = tp * revenue_1
+    revenue_tn = tn * revenue_0
+
+    # Penalty for FP
+    total_fp_penalty = fp * penalty_fp
+
+    # Opportunity cost for FN
+    total_fn_opp_cost = fn * revenue_1
+
+    # Net Revenue
+    net_revenue = revenue_tp + revenue_tn - total_fp_penalty - total_fn_opp_cost
+
+    # Create confusion matrix dataframe
     cm_df = pd.DataFrame(
         [[tn, fp], [fn, tp]],
         index=["Actual 0", "Actual 1"],
         columns=["Predicted 0", "Predicted 1"]
     )
 
-    # Plot heatmap
+    # Heatmap
     fig = px.imshow(
         cm_df,
         text_auto=True,
@@ -140,9 +179,21 @@ def update_outputs(threshold):
         title="Confusion Matrix"
     )
 
-    acc_text = f"Accuracy at threshold {threshold:.2f}: {accuracy:.3f} | TP={tp}, TN={tn}, FP={fp}, FN={fn}"
+    acc_text = (
+        f"Accuracy at threshold {threshold:.2f}: {accuracy:.3f} "
+        f"| TP={tp}, TN={tn}, FP={fp}, FN={fn} "
+        f"| Net Revenue = ${net_revenue:,.2f}"
+    )
 
-    return acc_text, fig
+    breakdown_text = (
+        f"TP Revenue = ${revenue_tp:,.2f}  |  "
+        f"TN Revenue = ${revenue_tn:,.2f}  |  "
+        f"FP Penalty = ${total_fp_penalty:,.2f}  |  "
+        f"FN Opportunity Cost = ${total_fn_opp_cost:,.2f}  |  "
+        f"Net Revenue = ${net_revenue:,.2f}"
+    )
+
+    return acc_text, breakdown_text, fig
 
 # ----------------------------
 # Run app
