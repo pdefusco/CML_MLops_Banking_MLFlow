@@ -41,7 +41,7 @@ import os
 import numpy as np
 import pandas as pd
 from datetime import datetime
-from pyspark.sql.types import LongType, IntegerType, StringType
+from pyspark.sql.types import LongType, IntegerType, StringType, FloatType
 from pyspark.sql import SparkSession
 import dbldatagen as dg
 import dbldatagen.distributions as dist
@@ -99,8 +99,6 @@ class BankDataGen:
             .otherwise(F.col("fraud_trx") * F.col("age") * F.col("mortgage_balance"))
         )
         df = df.withColumn("customer_score", F.col("customer_score").cast(FloatType()))
-
-
         return df
 
 
