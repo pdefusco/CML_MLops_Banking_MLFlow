@@ -131,11 +131,11 @@ class BankDataGen:
         Method to create database before data generated is saved to new database and table
         """
 
-        #spark.sql("DROP TABLE IF EXISTS `{0}.transactions_{1}` PURGE".format(self.dbname, self.username))
+        spark.sql("DROP TABLE IF EXISTS `{0}.transactions_{1}` PURGE".format(self.dbname, self.username))
 
-        #spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(self.dbname))
+        spark.sql("DROP DATABASE IF EXISTS {} CASCADE".format(self.dbname))
 
-        #spark.sql("CREATE DATABASE IF NOT EXISTS {}".format(self.dbname))
+        spark.sql("CREATE DATABASE IF NOT EXISTS {}".format(self.dbname))
 
         print("SHOW DATABASES LIKE '{}'".format(self.dbname))
         spark.sql("SHOW DATABASES LIKE '{}'".format(self.dbname)).show()
@@ -152,9 +152,9 @@ class BankDataGen:
             df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
               .using("iceberg").tableProperty("write.format.default", "parquet").append()
 
-        #except:
-        df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
-                .using("iceberg").tableProperty("write.format.default", "parquet").createOrReplace()
+        except:
+            df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
+              .using("iceberg").tableProperty("write.format.default", "parquet").createOrReplace()
 
 
     def validateTable(self, spark):
