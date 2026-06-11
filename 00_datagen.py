@@ -148,9 +148,9 @@ class BankDataGen:
         The table is meant to be updated periodically as part of a CML Job
         """
 
-        #try:
-        #    df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
-        #      .using("iceberg").tableProperty("write.format.default", "parquet").append()
+        try:
+            df.writeTo("{0}.CC_TRX_{1}".format(self.dbname, self.username))\
+              .using("iceberg").tableProperty("write.format.default", "parquet").append()
 
         #except:
         df.writeTo("{0}.transactions_{1}".format(self.dbname, self.username))\
