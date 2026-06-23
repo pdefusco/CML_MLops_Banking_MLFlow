@@ -49,6 +49,7 @@ from dbldatagen import FakerTextFactory, DataGenerator, fakerText
 from faker.providers import bank, credit_card, currency
 import cml.data_v1 as cmldata
 from pyspark.sql import functions as F
+from pyspark.sql.functions import when, rand
 
 
 class BankDataGen:
